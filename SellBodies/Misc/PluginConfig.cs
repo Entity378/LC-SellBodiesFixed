@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using UnityEngine;
 
 namespace CleaningCompany.Misc
 {
@@ -43,6 +44,11 @@ namespace CleaningCompany.Misc
         public float BRACKEN_WEIGHT { get; set; }
         public float MOUTHDOG_WEIGHT { get; set; }
         public float BABOON_WEIGHT { get; set; }
+
+        //body value multiplier
+        public float MULTIPLIER_VALUE { get; set; }
+        public float MULTIPLIER_POWER_COUNT_SUBTRACTION { get; set; }
+        public bool DISABLE_MULTIPLIER { get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -91,6 +97,10 @@ namespace CleaningCompany.Misc
             MOUTHDOG_WEIGHT = ConfigEntry("Body Weights", "Weight of Eyeless Dog Bodies", 3.0f, "");
             BABOON_WEIGHT = ConfigEntry("Body Weights", "Weight of Baboon Hawk Bodies", 2.5f, "");
             BRACKEN_WEIGHT = ConfigEntry("Body Weights", "Weight of Bracken Bodies", 1.9f, "");
+
+            MULTIPLIER_VALUE = ConfigEntry("Multiplier Options", "Multiplier Value", 4f, "Is used in the formula to calculate the multiplier (Muliplier = ((Total Power Count - Power Count Subtraction) / 100) * Multiplier Value))");
+            MULTIPLIER_POWER_COUNT_SUBTRACTION = ConfigEntry("Multiplier Options", "Power Count Subtraction", 10f, "Is used in the formula to calculate the multiplier (Muliplier = ((Total Power Count - Power Count Subtraction) / 100) * Multiplier Value))");
+            DISABLE_MULTIPLIER = ConfigEntry("Multiplier Options", "Disable Multiplier", false, "");
         }
     }
 }

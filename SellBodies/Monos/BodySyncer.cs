@@ -8,19 +8,29 @@ namespace CleaningCompany.Monos
     {
         public override void OnNetworkSpawn()
         {
+            base.OnNetworkSpawn();
+
             if (IsHost || IsServer)
             {
-                StartCoroutine(WaitToSync());
-            }
-            base.OnNetworkSpawn();
-        }
+                PhysicsProp prop = GetComponent<PhysicsProp>();
+                int priceBase = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
+                int totalPowerCount;
+                float priceMuliplier;
+                int price;
 
-        private IEnumerator WaitToSync()
-        {
-            yield return new WaitForSeconds(1f);
-            PhysicsProp prop = GetComponent<PhysicsProp>();
-            int price = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
-            SyncDetailsClientRpc(price, new NetworkBehaviourReference(prop));
+                if (Plugin.cfg.DISABLE_MULTIPLIER == false)
+                {
+                    totalPowerCount = StartOfRound.Instance.currentLevel.maxEnemyPowerCount + StartOfRound.Instance.currentLevel.maxOutsideEnemyPowerCount;
+                    priceMuliplier = ((((float)totalPowerCount - Plugin.cfg.MULTIPLIER_POWER_COUNT_SUBTRACTION) / 100f) * Plugin.cfg.MULTIPLIER_VALUE);
+                    price = (int)(priceBase + (int)(priceBase * priceMuliplier));
+                }
+                else
+                {
+                    price = priceBase;
+                }
+
+                SyncDetailsClientRpc(price, new NetworkBehaviourReference(prop));
+            }
         }
 
         [ClientRpc]

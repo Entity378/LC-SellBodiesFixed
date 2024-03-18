@@ -8,20 +8,15 @@ namespace CleaningCompany.Monos
     {
         public override void OnNetworkSpawn()
         {
+            base.OnNetworkSpawn();
+
             if (IsHost || IsServer)
             {
-                StartCoroutine(WaitToSync());
+                ShotgunItem prop = GetComponent<ShotgunItem>();
+                int price = Random.Range(30, 90);
+                int ammo = 2;
+                SyncDetailsClientRpc(price, ammo, new NetworkBehaviourReference(prop));
             }
-            base.OnNetworkSpawn();
-        }
-
-        private IEnumerator WaitToSync()
-        {
-            yield return new WaitForSeconds(1f);
-            ShotgunItem prop = GetComponent<ShotgunItem>();
-            int price = Random.Range(30, 90);
-            int ammo = 2;
-            SyncDetailsClientRpc(price, ammo, new NetworkBehaviourReference(prop));
         }
 
         [ClientRpc]

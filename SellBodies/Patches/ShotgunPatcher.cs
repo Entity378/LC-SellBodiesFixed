@@ -2,7 +2,6 @@
 using CleaningCompany.Monos;
 using System.Collections.Generic;
 
-
 namespace CleaningCompany.Patches
 {
     [HarmonyPatch(typeof(StartOfRound))]

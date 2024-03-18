@@ -7,18 +7,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
-#pragma warning disable CS8618
 
 namespace CleaningCompany
 {
     [BepInPlugin(GUID, NAME, VERSION)]
-    [BepInDependency("evaisa.lethallib", "0.14.2")]
+    [BepInDependency("evaisa.lethallib", "0.14.4")]
     public class Plugin : BaseUnityPlugin
     {
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.4.1";
+        const string VERSION = "1.5.0";
 
         static string root = "Assets/CleaningAssets/";
 
@@ -131,7 +130,6 @@ namespace CleaningCompany
                 { root+"MouthDogBody.asset", cfg.MOUTHDOG},
             };
         }
-
         void SetupScrap()
         {
             foreach (KeyValuePair<string, string> pair in pathToName)
