@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using CleaningCompany.Monos;
 using System.Collections.Generic;
 
@@ -9,7 +9,7 @@ namespace CleaningCompany.Patches
     {
         [HarmonyPostfix]
         [HarmonyPatch("Awake")]
-        private static void PatchAwake(StartOfRound __instance) 
+        private static void PatchAwake(StartOfRound __instance)
         {
             List<Item> itemsList = __instance.allItemsList.itemsList;
             foreach (Item item in itemsList)
