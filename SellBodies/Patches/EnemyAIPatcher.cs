@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using Unity.Netcode;
 using UnityEngine;
 using System.Collections;
@@ -29,20 +29,32 @@ namespace CleaningCompany.Patches
                     __instance.StartCoroutine(SpawnGenericBody(__instance, name));
                 }
             }
+            else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name))
+            {
+                __instance.StartCoroutine(SpawnModdedBody(__instance, name));
+            }
         }
 
         static IEnumerator SpawnGenericBody(EnemyAI __instance, string name)
         {
             yield return new WaitForSeconds(4);
 
-            GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, __instance.transform.position + Vector3.up, Quaternion.identity);
+            Vector3 OriginalBodyPos = new Vector3(-10000, -10000, -10000);
+            Vector3 SpawnPos = new Vector3(0, 1, 0);
+            GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, __instance.transform.position + SpawnPos, Quaternion.identity);
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
-            __instance.GetComponent<NetworkObject>().transform.position = new Vector3(-10000, -10000, -10000);
+            __instance.transform.position = OriginalBodyPos;
             __instance.SyncPositionToClients();
+            if (name == "Blob")
+            {
+                __instance.GetComponent<NetworkObject>().Despawn();
+            }
         }
 
         static IEnumerator SpawnNutcrackerBody(EnemyAI __instance, string name)
         {
+            Vector3 OriginalBodyPos = new Vector3(-10000, -10000, -10000);
+            Vector3 SpawnPos = new Vector3(0, 1, 0);
             __instance.GetComponent<NutcrackerEnemyAI>().gun.GetComponent<NetworkObject>().Despawn(true);
 
             List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
@@ -51,16 +63,41 @@ namespace CleaningCompany.Patches
                 string itemName = item.itemName;
                 if (itemName == "Shotgun")
                 {
-                    GameObject shotgunItem = Object.Instantiate(item.spawnPrefab, __instance.transform.position + Vector3.up, Quaternion.identity);
+                    GameObject shotgunItem = Object.Instantiate(item.spawnPrefab, __instance.transform.position + SpawnPos, Quaternion.identity);
                     shotgunItem.GetComponent<NetworkObject>().Spawn();
                     break;
                 }
             }
             yield return new WaitForSeconds(4);
 
-            GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, __instance.transform.position + Vector3.up, Quaternion.identity);
+            GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, __instance.transform.position + SpawnPos, Quaternion.identity);
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
-            __instance.GetComponent<NetworkObject>().transform.position = new Vector3(-10000, -10000, -10000);
+            __instance.transform.position = OriginalBodyPos;
+            __instance.SyncPositionToClients();
+        }
+
+        static IEnumerator SpawnModdedBody(EnemyAI __instance, string name)
+        {
+            yield return new WaitForSeconds(4);
+
+            Vector3 OriginalBodyPos = new Vector3(-10000, -10000, -10000);
+            Vector3 SpawnPos = new Vector3(0, 2, 0);
+            GameObject gameObjectCreated;
+            if (__instance.enemyType.PowerLevel <= 1)
+            {
+                gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns["ModdedEnemyPowerLevel1"].spawnPrefab, __instance.transform.position + SpawnPos, Quaternion.identity);
+            }
+            else if (__instance.enemyType.PowerLevel == 2)
+            {
+                gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns["ModdedEnemyPowerLevel2"].spawnPrefab, __instance.transform.position + SpawnPos, Quaternion.identity);
+            }
+            else
+            {
+                gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns["ModdedEnemyPowerLevel3"].spawnPrefab, __instance.transform.position + SpawnPos, Quaternion.identity);
+            }
+
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
+            __instance.transform.position = OriginalBodyPos;
             __instance.SyncPositionToClients();
         }
     }
