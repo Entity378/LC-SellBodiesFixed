@@ -79,11 +79,11 @@ namespace CleaningCompany.Patches
             yield return new WaitForSeconds(4);
 
             GameObject gameObjectCreated;
-            if (__instance.enemyType.PowerLevel <= 1)
+            if (__instance.GetComponent<EnemyAI>().enemyType.PowerLevel <= 1)
             {
                 gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns["ModdedEnemyPowerLevel1"].spawnPrefab, PropBodyPos + SpawnPos, Quaternion.identity);
             }
-            else if (__instance.enemyType.PowerLevel == 2)
+            else if (__instance.GetComponent<EnemyAI>().enemyType.PowerLevel == 2)
             {
                 gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns["ModdedEnemyPowerLevel2"].spawnPrefab, PropBodyPos + SpawnPos, Quaternion.identity);
             }
