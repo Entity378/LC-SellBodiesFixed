@@ -23,6 +23,7 @@ namespace CleaningCompany.Misc
         public bool SPORELIZARD { get; set; }
         public bool MANTICOIL { get; set; }
         public bool RADMECH { get; set; }
+        public bool TULIPSNAKE { get; set; }
         public bool MODDEDENEMY { get; set; }
 
         // two-handed bodies
@@ -42,6 +43,7 @@ namespace CleaningCompany.Misc
         public bool SPORELIZARD_TWOHANDED { get; set; }
         public bool MANTICOIL_TWOHANDED { get; set; }
         public bool RADMECH_TWOHANDED { get; set; }
+        public bool TULIPSNAKE_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL1_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL2_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL3_TWOHANDED { get; set; }
@@ -63,6 +65,7 @@ namespace CleaningCompany.Misc
         public int SPORELIZARD_MIN { get; set; }
         public int MANTICOIL_MIN { get; set; }
         public int RADMECH_MIN { get; set; }
+        public int TULIPSNAKE_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL1_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL2_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL3_MIN { get; set; }
@@ -84,6 +87,7 @@ namespace CleaningCompany.Misc
         public int SPORELIZARD_MAX { get; set; }
         public int MANTICOIL_MAX { get; set; }
         public int RADMECH_MAX { get; set; }
+        public int TULIPSNAKE_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL1_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL2_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL3_MAX { get; set; }
@@ -105,6 +109,7 @@ namespace CleaningCompany.Misc
         public float SPORELIZARD_WEIGHT { get; set; }
         public float MANTICOIL_WEIGHT { get; set; }
         public float RADMECH_WEIGHT { get; set; }
+        public float TULIPSNAKE_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL1_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL2_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL3_WEIGHT { get; set; }
@@ -159,6 +164,8 @@ namespace CleaningCompany.Misc
             MANTICOIL_MIN = ConfigEntry("Body Values", "Min price of Manticoil Bodies", 10, "");
             RADMECH_MAX = ConfigEntry("Body Values", "Max price of Rad Mech Bodies", 300, "");
             RADMECH_MIN = ConfigEntry("Body Values", "Min price of Rad Mech Bodies", 250, "");
+            TULIPSNAKE_MAX = ConfigEntry("Body Values", "Max price of Tulip Snake Bodies", 40, "");
+            TULIPSNAKE_MIN = ConfigEntry("Body Values", "Min price of Tulip Snake Bodies", 25, "");
             MODDEDENEMYPOWERLEVEL1_MAX = ConfigEntry("Body Values", "Max price of Modded Enemy Bodies With 1 Or Less PowerLevel", 100, "");
             MODDEDENEMYPOWERLEVEL1_MIN = ConfigEntry("Body Values", "Min price of Modded Enemy Bodies With 1 Or Less PowerLevel", 75, "");
             MODDEDENEMYPOWERLEVEL2_MAX = ConfigEntry("Body Values", "Max price of Modded Enemy Bodies With 2 PowerLevel", 150, "");
@@ -182,6 +189,7 @@ namespace CleaningCompany.Misc
             SPORELIZARD = ConfigEntry("Body Enabler", "Enable selling of Spore Lizard Bodies", true, "");
             MANTICOIL = ConfigEntry("Body Enabler", "Enable selling of Manticoil Bodies", true, "");
             RADMECH = ConfigEntry("Body Enabler", "Enable selling of Rad Mech Bodies", true, "");
+            TULIPSNAKE = ConfigEntry("Body Enabler", "Enable selling of Tulip Snake Bodies", true, "");
             MODDEDENEMY = ConfigEntry("Body Enabler", "Enable selling of Modded Enemy Bodies", true, "");
 
             CENTIPEDE_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Centipede Bodies", false, "");
@@ -200,6 +208,7 @@ namespace CleaningCompany.Misc
             SPORELIZARD_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Spore Lizard Bodies", true, "");
             MANTICOIL_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Manticoil Bodies", false, "");
             RADMECH_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Rad Mech Bodies", false, "");
+            TULIPSNAKE_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Tulip Snake Bodies", false, "");
             MODDEDENEMYPOWERLEVEL1_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 1 Or Less PowerLevel", false, "");
             MODDEDENEMYPOWERLEVEL2_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 2 PowerLevel", false, "");
             MODDEDENEMYPOWERLEVEL3_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 3 Or Higher PowerLevel", false, "");
@@ -220,6 +229,7 @@ namespace CleaningCompany.Misc
             SPORELIZARD_WEIGHT = ConfigEntry("Body Weights", "Weight of Spore Lizard Bodies", 1.8f, "");
             MANTICOIL_WEIGHT = ConfigEntry("Body Weights", "Weight of Manticoil Bodies", 1.15f, "");
             RADMECH_WEIGHT = ConfigEntry("Body Weights", "Weight of Rad Mech Bodies", 1.5f, "");
+            TULIPSNAKE_WEIGHT = ConfigEntry("Body Weights", "Weight of Rad Mech Bodies", 1.4f, "");
             MODDEDENEMYPOWERLEVEL1_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 1 Or Less PowerLevel", 1.35f, "");
             MODDEDENEMYPOWERLEVEL2_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 2 PowerLevel", 1.65f, "");
             MODDEDENEMYPOWERLEVEL3_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 3 Or Higher PowerLevel", 1.85f, "");
