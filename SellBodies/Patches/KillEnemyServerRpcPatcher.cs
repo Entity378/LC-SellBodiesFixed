@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace CleaningCompany.Patches
 {
     [HarmonyPatch(typeof(EnemyAI))]
-    internal class EnemyAIPatcher
+    internal class KillEnemyServerRpcPatcher
     {
         private static ulong currentEnemy = 9999999;
         [HarmonyPostfix]
@@ -31,7 +31,7 @@ namespace CleaningCompany.Patches
             }
             else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name))
             {
-                __instance.StartCoroutine(SpawnModdedBody(__instance, name));
+                __instance.StartCoroutine(SpawnModdedBody(__instance));
             }
         }
 
@@ -72,7 +72,7 @@ namespace CleaningCompany.Patches
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
         }
 
-        static IEnumerator SpawnModdedBody(EnemyAI __instance, string name)
+        static IEnumerator SpawnModdedBody(EnemyAI __instance)
         {
             Vector3 PropBodyPos = __instance.transform.position;
             Vector3 SpawnPos = new Vector3(0, 2, 0);
