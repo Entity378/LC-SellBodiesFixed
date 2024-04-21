@@ -17,7 +17,7 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.7.2";
+        const string VERSION = "1.8.0";
 
         static string root = "Assets/CleaningAssets/";
 
@@ -49,6 +49,7 @@ namespace CleaningCompany
             { root+"PufferBody.asset", "Puffer"},
             { root+"ManticoilBody.asset", "Manticoil"},
             { root+"RadMechBody.asset", "RadMech"},
+            { root+"TulipSnakeBody.asset", "Tulip Snake"},
             { root+"ModdedEnemyPowerLevel1Body.asset", "ModdedEnemyPowerLevel1"},
             { root+"ModdedEnemyPowerLevel2Body.asset", "ModdedEnemyPowerLevel2"},
             { root+"ModdedEnemyPowerLevel3Body.asset", "ModdedEnemyPowerLevel3"},
@@ -79,6 +80,7 @@ namespace CleaningCompany
             "Red Locust Bees",
             "Docile Locust Bees",
             "Manticoil",
+            "Tulip Snake",
         };
 
         public List<GameObject> tools = new List<GameObject>();
@@ -140,6 +142,7 @@ namespace CleaningCompany
                 { root+"PufferBody.asset", cfg.SPORELIZARD_WEIGHT},
                 { root+"ManticoilBody.asset", cfg.MANTICOIL_WEIGHT},
                 { root+"RadMechBody.asset", cfg.RADMECH_WEIGHT},
+                { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_WEIGHT},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_WEIGHT},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_WEIGHT},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_WEIGHT},
@@ -163,6 +166,7 @@ namespace CleaningCompany
                 { root+"PufferBody.asset", cfg.SPORELIZARD_MAX},
                 { root+"ManticoilBody.asset", cfg.MANTICOIL_MAX},
                 { root+"RadMechBody.asset", cfg.RADMECH_MAX},
+                { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_MAX},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_MAX},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_MAX},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_MAX},
@@ -186,6 +190,7 @@ namespace CleaningCompany
                 { root+"PufferBody.asset", cfg.SPORELIZARD_MIN},
                 { root+"ManticoilBody.asset", cfg.MANTICOIL_MIN},
                 { root+"RadMechBody.asset", cfg.RADMECH_MIN},
+                { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_MIN},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_MIN},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_MIN},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_MIN},
@@ -209,6 +214,7 @@ namespace CleaningCompany
                 { root+"PufferBody.asset", cfg.SPORELIZARD},
                 { root+"ManticoilBody.asset", cfg.MANTICOIL},
                 { root+"RadMechBody.asset", cfg.RADMECH},
+                { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMY},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMY},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMY},
@@ -232,6 +238,7 @@ namespace CleaningCompany
                 { root+"PufferBody.asset", cfg.SPORELIZARD_TWOHANDED},
                 { root+"ManticoilBody.asset", cfg.MANTICOIL_TWOHANDED},
                 { root+"RadMechBody.asset", cfg.RADMECH_TWOHANDED},
+                { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_TWOHANDED},
@@ -248,7 +255,7 @@ namespace CleaningCompany
                 body.maxValue = maxBodyValues[pair.Key];
                 body.minValue = minBodyValues[pair.Key];
                 body.weight = bodyWeights[pair.Key];
-                LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(body.spawnPrefab);
+                NetworkPrefabs.RegisterNetworkPrefab(body.spawnPrefab);
                 Items.RegisterItem(body);
 
                 if (BodiesToDrop[pair.Key])
