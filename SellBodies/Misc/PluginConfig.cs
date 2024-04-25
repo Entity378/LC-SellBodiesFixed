@@ -229,7 +229,7 @@ namespace CleaningCompany.Misc
             SPORELIZARD_WEIGHT = ConfigEntry("Body Weights", "Weight of Spore Lizard Bodies", 1.8f, "");
             MANTICOIL_WEIGHT = ConfigEntry("Body Weights", "Weight of Manticoil Bodies", 1.15f, "");
             RADMECH_WEIGHT = ConfigEntry("Body Weights", "Weight of Rad Mech Bodies", 1.5f, "");
-            TULIPSNAKE_WEIGHT = ConfigEntry("Body Weights", "Weight of Rad Mech Bodies", 1.4f, "");
+            TULIPSNAKE_WEIGHT = ConfigEntry("Body Weights", "Weight of Tulip Snake Bodies", 1.4f, "");
             MODDEDENEMYPOWERLEVEL1_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 1 Or Less PowerLevel", 1.35f, "");
             MODDEDENEMYPOWERLEVEL2_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 2 PowerLevel", 1.65f, "");
             MODDEDENEMYPOWERLEVEL3_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 3 Or Higher PowerLevel", 1.85f, "");
