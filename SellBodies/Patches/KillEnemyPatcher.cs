@@ -1,14 +1,14 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using UnityEngine;
 using System.Collections;
 
 namespace CleaningCompany.Patches
 {
     [HarmonyPatch(typeof(EnemyAI))]
-    internal class EnemyAIPosPatcher
+    internal class KillEnemyPatcher
     {
         [HarmonyPrefix]
-        [HarmonyPatch("KillEnemyOnOwnerClient")]
+        [HarmonyPatch("KillEnemy")]
         static void MoveBody(EnemyAI __instance)
         {
             string name = __instance.enemyType.enemyName;
