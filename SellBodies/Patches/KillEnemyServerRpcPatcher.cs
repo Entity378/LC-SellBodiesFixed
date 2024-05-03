@@ -15,19 +15,9 @@ namespace CleaningCompany.Patches
         static void SpawnScrapBody(EnemyAI __instance)
         {
             if (currentEnemy == __instance.NetworkObject.NetworkObjectId) return;
+            if (!__instance.IsHost) return;
             currentEnemy = __instance.NetworkObject.NetworkObjectId;
             string name = __instance.enemyType.enemyName;
-
-            if (Plugin.instance.BodySpawns.ContainsKey(name))
-            {
-                __instance.StartCoroutine(MoveOldBody(__instance));
-            }
-            else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name))
-            {
-                __instance.StartCoroutine(MoveOldBody(__instance));
-            }
-
-            if (!__instance.IsHost) return;
 
             if (Plugin.instance.BodySpawns.ContainsKey(name))
             {
@@ -104,15 +94,6 @@ namespace CleaningCompany.Patches
             }
 
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
-        }
-
-        static IEnumerator MoveOldBody(EnemyAI __instance)
-        {
-            yield return new WaitForSeconds(4);
-
-            Vector3 OriginalBodyPos = new Vector3(-10000, -10000, -10000);
-            __instance.transform.position = OriginalBodyPos;
-            __instance.SyncPositionToClients();
         }
     }
 }
