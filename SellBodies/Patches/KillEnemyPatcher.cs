@@ -28,7 +28,6 @@ namespace CleaningCompany.Patches
 
             Vector3 OriginalBodyPos = new Vector3(-10000, -10000, -10000);
             __instance.transform.position = OriginalBodyPos;
-            __instance.SyncPositionToClients();
         }
     }
 }
