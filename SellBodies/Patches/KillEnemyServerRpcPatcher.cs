@@ -10,6 +10,7 @@ namespace CleaningCompany.Patches
     internal class KillEnemyServerRpcPatcher
     {
         public static Quaternion publicBodyRotation;
+        public static Quaternion publicShotgunRotation;
         private static ulong currentEnemy = 9999999;
 
         [HarmonyPostfix]
@@ -70,7 +71,7 @@ namespace CleaningCompany.Patches
                 if (itemName == "Shotgun")
                 {
                     GameObject shotgunItem = Object.Instantiate(item.spawnPrefab, PropBodyPos + SpawnPos, PropBodyRot, RoundManager.Instance.mapPropsContainer.transform);
-                    publicBodyRotation = PropBodyRot;
+                    publicShotgunRotation = PropBodyRot;
                     shotgunItem.GetComponent<NetworkObject>().Spawn();
                     break;
                 }
