@@ -11,6 +11,8 @@ namespace CleaningCompany.Patches
     {
         public static Quaternion publicBodyRotation;
         public static Quaternion publicShotgunRotation;
+        public static int publicShotgunPrice;
+
         private static ulong currentEnemy = 9999999;
 
         [HarmonyPostfix]
@@ -62,6 +64,7 @@ namespace CleaningCompany.Patches
             Quaternion PropBodyRot = __instance.transform.rotation;
             Vector3 SpawnPos = new Vector3(0, 1, 0);
 
+            publicShotgunPrice = __instance.GetComponent<NutcrackerEnemyAI>().gun.scrapValue;
             __instance.GetComponent<NutcrackerEnemyAI>().gun.GetComponent<NetworkObject>().Despawn(true);
 
             List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;

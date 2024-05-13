@@ -15,9 +15,11 @@ namespace CleaningCompany.Monos
             {
                 Quaternion shotgunRotation = KillEnemyServerRpcPatcher.publicShotgunRotation;
                 ShotgunItem prop = GetComponent<ShotgunItem>();
-                int price = Random.Range(30, 90);
+                int price = KillEnemyServerRpcPatcher.publicShotgunPrice;
                 int ammo = 2;
                 SyncDetailsClientRpc(price, shotgunRotation, ammo, new NetworkBehaviourReference(prop));
+                KillEnemyServerRpcPatcher.publicShotgunPrice = 0;
+                KillEnemyServerRpcPatcher.publicShotgunRotation = new Quaternion();
             }
         }
 
