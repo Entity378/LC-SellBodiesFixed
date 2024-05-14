@@ -18,8 +18,7 @@ namespace CleaningCompany.Monos
                 int price = KillEnemyServerRpcPatcher.publicShotgunPrice;
                 int ammo = 2;
                 SyncDetailsClientRpc(price, shotgunRotation, ammo, new NetworkBehaviourReference(prop));
-                KillEnemyServerRpcPatcher.publicShotgunPrice = 0;
-                KillEnemyServerRpcPatcher.publicShotgunRotation = new Quaternion();
+                Debug.Log("End of OnNetworkSpawn shotgun override");
             }
         }
 
@@ -36,6 +35,8 @@ namespace CleaningCompany.Monos
                 RoundManager.Instance.totalScrapValueInLevel += price;
                 Debug.Log("Successfully synced shotgun values");
                 StartCoroutine(RotateShotgunClient(prop, rot));
+                KillEnemyServerRpcPatcher.publicShotgunPrice = 0;
+                KillEnemyServerRpcPatcher.publicShotgunRotation = new Quaternion();
             }
             else Debug.LogError("Failed to resolve network reference!");
         }

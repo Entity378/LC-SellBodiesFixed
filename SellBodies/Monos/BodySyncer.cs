@@ -31,6 +31,7 @@ namespace CleaningCompany.Monos
                     price = priceBase;
                 }
                 SyncDetailsClientRpc(price, bodyRotation, new NetworkBehaviourReference(prop));
+                Debug.Log("End of OnNetworkSpawn body override");
             }
         }
 
@@ -45,6 +46,7 @@ namespace CleaningCompany.Monos
                 prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${price}";
                 Debug.Log("Successfully synced body values");
                 StartCoroutine(RotateBodyClient(prop, rot));
+                KillEnemyServerRpcPatcher.publicBodyRotation = new Quaternion();
             }
             else Debug.LogError("Failed to resolve network reference!");
         }
