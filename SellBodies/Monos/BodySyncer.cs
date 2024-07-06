@@ -46,7 +46,6 @@ namespace CleaningCompany.Monos
                 prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${price}";
                 Debug.Log("Successfully synced body values");
                 StartCoroutine(RotateBodyClient(prop, rot));
-                KillEnemyServerRpcPatcher.publicBodyRotation = new Quaternion();
             }
             else Debug.LogError("Failed to resolve network reference!");
         }
@@ -59,6 +58,7 @@ namespace CleaningCompany.Monos
                 Debug.Log("Waiting for the body to hit the ground");
             }
             prop.GetComponent<Transform>().transform.SetPositionAndRotation(prop.transform.position, rot);
+            KillEnemyServerRpcPatcher.publicBodyRotation = new Quaternion();
         }
     }
 }

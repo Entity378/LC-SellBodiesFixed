@@ -19,16 +19,16 @@
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>C:\Users\fabri\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\MODS 49.0V TEST\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>C:\Users\fabri\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\MODS 50.0V TEST\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>C:\Users\fabri\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\MODS 49.0V TEST\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>C:\Users\fabri\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\MODS 50.0V TEST\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="LethalLib">
-      <HintPath>C:\Users\fabri\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\MODS 49.0V TEST\BepInEx\plugins\Evaisa-LethalLib\LethalLib\LethalLib.dll</HintPath>
+      <HintPath>C:\Users\fabri\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\MODS 50.0V TEST\BepInEx\plugins\Evaisa-LethalLib\LethalLib\LethalLib.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Netcode.Components">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Components.dll</HintPath>

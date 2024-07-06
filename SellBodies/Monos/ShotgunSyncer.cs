@@ -35,8 +35,6 @@ namespace CleaningCompany.Monos
                 RoundManager.Instance.totalScrapValueInLevel += price;
                 Debug.Log("Successfully synced shotgun values");
                 StartCoroutine(RotateShotgunClient(prop, rot));
-                KillEnemyServerRpcPatcher.publicShotgunPrice = 0;
-                KillEnemyServerRpcPatcher.publicShotgunRotation = new Quaternion();
             }
             else Debug.LogError("Failed to resolve network reference!");
         }
@@ -49,6 +47,7 @@ namespace CleaningCompany.Monos
                 Debug.Log("Waiting for the body to hit the ground");
             }
             prop.GetComponent<Transform>().transform.SetPositionAndRotation(prop.transform.position, rot);
+            KillEnemyServerRpcPatcher.publicShotgunRotation = new Quaternion();
         }
     }
 }

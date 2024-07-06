@@ -17,7 +17,7 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.8.8";
+        const string VERSION = "1.9.0";
 
         static string root = "Assets/CleaningAssets/";
 
@@ -50,6 +50,8 @@ namespace CleaningCompany
             { root+"ManticoilBody.asset", "Manticoil"},
             { root+"RadMechBody.asset", "RadMech"},
             { root+"TulipSnakeBody.asset", "Tulip Snake"},
+            { root+"ClaySurgeonBody.asset", "Clay Surgeon"},
+            { root+"BushWolfBody.asset", "Bush Wolf"},
             { root+"ModdedEnemyPowerLevel1Body.asset", "ModdedEnemyPowerLevel1"},
             { root+"ModdedEnemyPowerLevel2Body.asset", "ModdedEnemyPowerLevel2"},
             { root+"ModdedEnemyPowerLevel3Body.asset", "ModdedEnemyPowerLevel3"},
@@ -81,6 +83,8 @@ namespace CleaningCompany
             "Docile Locust Bees",
             "Manticoil",
             "Tulip Snake",
+            "Clay Surgeon",
+            "Bush Wolf",
         };
 
         public List<GameObject> tools = new List<GameObject>();
@@ -143,6 +147,8 @@ namespace CleaningCompany
                 { root+"ManticoilBody.asset", cfg.MANTICOIL_WEIGHT},
                 { root+"RadMechBody.asset", cfg.RADMECH_WEIGHT},
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_WEIGHT},
+                { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON_WEIGHT},
+                { root+"BushWolfBody.asset", cfg.BUSHWOLF_WEIGHT},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_WEIGHT},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_WEIGHT},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_WEIGHT},
@@ -167,6 +173,8 @@ namespace CleaningCompany
                 { root+"ManticoilBody.asset", cfg.MANTICOIL_MAX},
                 { root+"RadMechBody.asset", cfg.RADMECH_MAX},
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_MAX},
+                { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON_MAX},
+                { root+"BushWolfBody.asset", cfg.BUSHWOLF_MAX},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_MAX},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_MAX},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_MAX},
@@ -191,6 +199,8 @@ namespace CleaningCompany
                 { root+"ManticoilBody.asset", cfg.MANTICOIL_MIN},
                 { root+"RadMechBody.asset", cfg.RADMECH_MIN},
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_MIN},
+                { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON_MIN},
+                { root+"BushWolfBody.asset", cfg.BUSHWOLF_MIN},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_MIN},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_MIN},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_MIN},
@@ -215,6 +225,8 @@ namespace CleaningCompany
                 { root+"ManticoilBody.asset", cfg.MANTICOIL},
                 { root+"RadMechBody.asset", cfg.RADMECH},
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE},
+                { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON},
+                { root+"BushWolfBody.asset", cfg.BUSHWOLF},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMY},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMY},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMY},
@@ -239,6 +251,8 @@ namespace CleaningCompany
                 { root+"ManticoilBody.asset", cfg.MANTICOIL_TWOHANDED},
                 { root+"RadMechBody.asset", cfg.RADMECH_TWOHANDED},
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_TWOHANDED},
+                { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON_TWOHANDED},
+                { root+"BushWolfBody.asset", cfg.BUSHWOLF_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_TWOHANDED},
