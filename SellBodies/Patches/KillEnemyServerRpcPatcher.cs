@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using GameNetcodeStuff;
 
 namespace CleaningCompany.Patches
 {
@@ -21,6 +22,7 @@ namespace CleaningCompany.Patches
         {
             if (currentEnemy == __instance.NetworkObject.NetworkObjectId) return;
             if (!__instance.IsHost) return;
+            if (__instance.GetComponentInChildren<PlayerControllerB>()) return;
             currentEnemy = __instance.NetworkObject.NetworkObjectId;
             string name = __instance.enemyType.enemyName;
 
