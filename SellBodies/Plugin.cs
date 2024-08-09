@@ -17,9 +17,9 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.9.2";
+        const string VERSION = "1.9.5";
 
-        static string root = "Assets/CleaningAssets/";
+        static string root = "Assets/LethalCompany/SellBodies/cleaningassets/";
 
         Dictionary<string, int> minBodyValues;
 
@@ -90,15 +90,20 @@ namespace CleaningCompany
         public List<GameObject> tools = new List<GameObject>();
 
         AssetBundle bundle;
+
         public static Plugin instance;
 
         public static PluginConfig cfg { get; private set; }
+
+        public static GameObject confettiPrefab = new GameObject();
+        public static AudioClip Cheer = new AudioClip();
+        public static AudioClip Yippee = new AudioClip();
+        public static AudioClip POP = new AudioClip();
 
         void Awake()
         {
             cfg = new PluginConfig(base.Config);
             cfg.InitBindings();
-
 
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var type in types)
@@ -116,6 +121,11 @@ namespace CleaningCompany
 
             string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sellbodies");
             bundle = AssetBundle.LoadFromFile(assetDir);
+
+            confettiPrefab = bundle.LoadAsset<GameObject>("Assets/LethalCompany/SellBodies/EE/ConfettiParticle.prefab");
+            Cheer = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/Cheer.ogg");
+            Yippee = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/Yippee.ogg");
+            POP = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/POP.ogg");
 
             instance = this;
 

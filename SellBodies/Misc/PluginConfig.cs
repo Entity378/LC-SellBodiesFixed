@@ -129,6 +129,10 @@ namespace CleaningCompany.Misc
         public float MULTIPLIER_POWER_COUNT_SUBTRACTION { get; set; }
         public bool DISABLE_MULTIPLIER { get; set; }
 
+        //confetti
+        public bool CONFETTI { get; set; }
+        public bool YIPPEE { get; set; }
+
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -257,6 +261,9 @@ namespace CleaningCompany.Misc
             MULTIPLIER_VALUE = ConfigEntry("Multiplier Options", "Multiplier Value", 4f, "Is used in the formula to calculate the multiplier (Muliplier = ((Total Power Count - Power Count Subtraction) / 100) * Multiplier Value))");
             MULTIPLIER_POWER_COUNT_SUBTRACTION = ConfigEntry("Multiplier Options", "Power Count Subtraction", 10f, "Is used in the formula to calculate the multiplier (Muliplier = ((Total Power Count - Power Count Subtraction) / 100) * Multiplier Value))");
             DISABLE_MULTIPLIER = ConfigEntry("Multiplier Options", "Disable Multiplier", false, "");
+
+            CONFETTI = ConfigEntry("Confetti Options", "Enable Confetti", false, "");
+            YIPPEE = ConfigEntry("Confetti Options", "Enable Yippe", false, "");
         }
     }
 }
