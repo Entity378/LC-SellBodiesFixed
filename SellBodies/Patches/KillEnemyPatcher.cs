@@ -21,37 +21,38 @@ namespace CleaningCompany.Patches
             {
                 __instance.StartCoroutine(MoveOldBody(__instance));
             }
-            SpawnConfetti(__instance);
+
+            if (Plugin.cfg.CONFETTI) 
+            {
+                SpawnConfetti(__instance);
+            }
         }
 
         static IEnumerator MoveOldBody(EnemyAI __instance)
         {
             yield return new WaitForSeconds(4);
-
-            Vector3 newBodyPos = new Vector3(-10000, -10000, -10000);
-            __instance.transform.position = newBodyPos;
-            __instance.SyncPositionToClients();
+            try 
+            {
+                Vector3 newBodyPos = new Vector3(-10000, -10000, -10000);
+                __instance.transform.position = newBodyPos;
+                __instance.SyncPositionToClients();
+            }
+            catch
+            {
+                Debug.LogError("An error has occurred in MoveOldBody() inside KillEnemy()");
+            }
         }
 
         static void SpawnConfetti(EnemyAI __instance)
         {
-            if (Plugin.cfg.CONFETTI)
+            try
             {
-                try 
-                {
-                    Object.Instantiate(Plugin.confettiPrefab, __instance.transform.position, Quaternion.Euler(0f, 0f, 0f),
-                    RoundManager.Instance.mapPropsContainer.transform).SetActive(value: true);
-                }
-                catch{ }
-
-                if (Plugin.cfg.YIPPEE)
-                {
-                    __instance.GetComponent<AudioSource>().PlayOneShot(Plugin.Yippee);
-                }
-                else
-                {
-                    __instance.GetComponent<AudioSource>().PlayOneShot(Plugin.Cheer);
-                }
+                Object.Instantiate(Plugin.confettiPrefab, __instance.transform.position, Quaternion.Euler(0f, 0f, 0f),
+                RoundManager.Instance.mapPropsContainer.transform).SetActive(value: true);
+            }
+            catch
+            {
+                Debug.LogError("An error has occurred in SpawnConfetti() inside KillEnemy()");
             }
         }
     }

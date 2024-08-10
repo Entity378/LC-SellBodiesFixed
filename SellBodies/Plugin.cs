@@ -17,7 +17,7 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.9.5";
+        const string VERSION = "1.9.6";
 
         static string root = "Assets/LethalCompany/SellBodies/cleaningassets/";
 
@@ -126,6 +126,15 @@ namespace CleaningCompany
             Cheer = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/Cheer.ogg");
             Yippee = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/Yippee.ogg");
             POP = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/POP.ogg");
+            if (cfg.YIPPEE)
+            {
+                confettiPrefab.AddComponent<AudioSource>().clip = Yippee;
+            }
+            else
+            {
+                confettiPrefab.AddComponent<AudioSource>().clip = Cheer;
+            }
+            confettiPrefab.GetComponent<AudioSource>().playOnAwake = true;
 
             instance = this;
 
@@ -268,6 +277,7 @@ namespace CleaningCompany
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_TWOHANDED},
             };
         }
+
         void SetupScrap()
         {
             foreach (KeyValuePair<string, string> pair in pathToName)
