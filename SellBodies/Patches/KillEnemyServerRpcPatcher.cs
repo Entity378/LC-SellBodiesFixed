@@ -16,7 +16,7 @@ namespace CleaningCompany.Patches
 
         private static ulong currentEnemy = 9999999;
 
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch("KillEnemyServerRpc")]
         static void SpawnScrapBody(EnemyAI __instance)
         {

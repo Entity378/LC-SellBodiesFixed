@@ -26,6 +26,7 @@ namespace CleaningCompany.Misc
         public bool TULIPSNAKE { get; set; }
         public bool CLAYSURGEON { get; set; }
         public bool BUSHWOLF { get; set; }
+        public bool MANEATER { get; set; }
         public bool MODDEDENEMY { get; set; }
 
         // two-handed bodies
@@ -48,6 +49,7 @@ namespace CleaningCompany.Misc
         public bool TULIPSNAKE_TWOHANDED { get; set; }
         public bool CLAYSURGEON_TWOHANDED { get; set; }
         public bool BUSHWOLF_TWOHANDED { get; set; }
+        public bool MANEATER_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL1_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL2_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL3_TWOHANDED { get; set; }
@@ -72,6 +74,7 @@ namespace CleaningCompany.Misc
         public int TULIPSNAKE_MIN { get; set; }
         public int CLAYSURGEON_MIN { get; set; }
         public int BUSHWOLF_MIN { get; set; }
+        public int MANEATER_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL1_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL2_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL3_MIN { get; set; }
@@ -96,6 +99,7 @@ namespace CleaningCompany.Misc
         public int TULIPSNAKE_MAX { get; set; }
         public int CLAYSURGEON_MAX { get; set; }
         public int BUSHWOLF_MAX { get; set; }
+        public int MANEATER_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL1_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL2_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL3_MAX { get; set; }
@@ -120,6 +124,7 @@ namespace CleaningCompany.Misc
         public float TULIPSNAKE_WEIGHT { get; set; }
         public float CLAYSURGEON_WEIGHT { get; set; }
         public float BUSHWOLF_WEIGHT { get; set; }
+        public float MANEATER_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL1_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL2_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL3_WEIGHT { get; set; }
@@ -184,6 +189,8 @@ namespace CleaningCompany.Misc
             CLAYSURGEON_MIN = ConfigEntry("Body Values", "Min price of Barber Bodies",150, "");
             BUSHWOLF_MAX = ConfigEntry("Body Values", "Max price of Kidnapper Fox Bodies", 150, "");
             BUSHWOLF_MIN = ConfigEntry("Body Values", "Min price of Kidnapper Fox Bodies", 125, "");
+            MANEATER_MAX = ConfigEntry("Body Values", "Max price of Maneater Bodies", 145, "");
+            MANEATER_MIN = ConfigEntry("Body Values", "Min price of Maneater Bodies", 120, "");
             MODDEDENEMYPOWERLEVEL1_MAX = ConfigEntry("Body Values", "Max price of Modded Enemy Bodies With 1 Or Less PowerLevel", 100, "");
             MODDEDENEMYPOWERLEVEL1_MIN = ConfigEntry("Body Values", "Min price of Modded Enemy Bodies With 1 Or Less PowerLevel", 75, "");
             MODDEDENEMYPOWERLEVEL2_MAX = ConfigEntry("Body Values", "Max price of Modded Enemy Bodies With 2 PowerLevel", 150, "");
@@ -210,6 +217,7 @@ namespace CleaningCompany.Misc
             TULIPSNAKE = ConfigEntry("Body Enabler", "Enable selling of Tulip Snake Bodies", true, "");
             CLAYSURGEON = ConfigEntry("Body Enabler", "Enable selling of Barber Bodies", true, "");
             BUSHWOLF = ConfigEntry("Body Enabler", "Enable selling of Kidnapper Fox Bodies", true, "");
+            MANEATER = ConfigEntry("Body Enabler", "Enable selling of Maneater Bodies", true, "");
             MODDEDENEMY = ConfigEntry("Body Enabler", "Enable selling of Modded Enemy Bodies", true, "");
 
             CENTIPEDE_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Centipede Bodies", false, "");
@@ -231,6 +239,7 @@ namespace CleaningCompany.Misc
             TULIPSNAKE_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Tulip Snake Bodies", false, "");
             CLAYSURGEON_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Barber Bodies", true, "");
             BUSHWOLF_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Kidnapper Fox Bodies", false, "");
+            MANEATER_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Maneater Bodies", false, "");
             MODDEDENEMYPOWERLEVEL1_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 1 Or Less PowerLevel", false, "");
             MODDEDENEMYPOWERLEVEL2_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 2 PowerLevel", false, "");
             MODDEDENEMYPOWERLEVEL3_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 3 Or Higher PowerLevel", false, "");
@@ -254,6 +263,7 @@ namespace CleaningCompany.Misc
             TULIPSNAKE_WEIGHT = ConfigEntry("Body Weights", "Weight of Tulip Snake Bodies", 1.07f, "");
             CLAYSURGEON_WEIGHT = ConfigEntry("Body Weights", "Weight of Barber Bodies", 1.76f, "");
             BUSHWOLF_WEIGHT = ConfigEntry("Body Weights", "Weight of Kidnapper Fox Bodies", 1.33f, "");
+            MANEATER_WEIGHT = ConfigEntry("Body Weights", "Weight of Maneater Bodies", 1.33f, "");
             MODDEDENEMYPOWERLEVEL1_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 1 Or Less PowerLevel", 1.33f, "");
             MODDEDENEMYPOWERLEVEL2_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 2 PowerLevel", 1.52f, "");
             MODDEDENEMYPOWERLEVEL3_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 3 Or Higher PowerLevel", 1.86f, "");

@@ -11,20 +11,23 @@ namespace CleaningCompany.Patches
         [HarmonyPatch("KillEnemy")]
         static void MoveBody(EnemyAI __instance)
         {
-            string name = __instance.enemyType.enemyName;
-            if (Plugin.instance.BodySpawns.ContainsKey(name))
+            if (!__instance.isEnemyDead) 
             {
-                __instance.StartCoroutine(MoveOldBody(__instance));
+                string name = __instance.enemyType.enemyName;
+                if (Plugin.instance.BodySpawns.ContainsKey(name))
+                {
+                    __instance.StartCoroutine(MoveOldBody(__instance));
 
-            }
-            else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name))
-            {
-                __instance.StartCoroutine(MoveOldBody(__instance));
-            }
+                }
+                else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name))
+                {
+                    __instance.StartCoroutine(MoveOldBody(__instance));
+                }
 
-            if (Plugin.cfg.CONFETTI) 
-            {
-                SpawnConfetti(__instance);
+                if (Plugin.cfg.CONFETTI)
+                {
+                    SpawnConfetti(__instance);
+                }
             }
         }
 

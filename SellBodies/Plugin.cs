@@ -17,7 +17,7 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.9.6";
+        const string VERSION = "1.10.0";
 
         static string root = "Assets/LethalCompany/SellBodies/cleaningassets/";
 
@@ -52,6 +52,7 @@ namespace CleaningCompany
             { root+"TulipSnakeBody.asset", "Tulip Snake"},
             { root+"ClaySurgeonBody.asset", "Clay Surgeon"},
             { root+"BushWolfBody.asset", "Bush Wolf"},
+            { root+"CaveDwellerBody.asset", "Maneater"},
             { root+"ModdedEnemyPowerLevel1Body.asset", "ModdedEnemyPowerLevel1"},
             { root+"ModdedEnemyPowerLevel2Body.asset", "ModdedEnemyPowerLevel2"},
             { root+"ModdedEnemyPowerLevel3Body.asset", "ModdedEnemyPowerLevel3"},
@@ -85,6 +86,7 @@ namespace CleaningCompany
             "Tulip Snake",
             "Clay Surgeon",
             "Bush Wolf",
+            "Maneater",
         };
 
         public List<GameObject> tools = new List<GameObject>();
@@ -168,6 +170,7 @@ namespace CleaningCompany
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_WEIGHT},
                 { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON_WEIGHT},
                 { root+"BushWolfBody.asset", cfg.BUSHWOLF_WEIGHT},
+                { root+"CaveDwellerBody.asset", cfg.MANEATER_WEIGHT},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_WEIGHT},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_WEIGHT},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_WEIGHT},
@@ -194,6 +197,7 @@ namespace CleaningCompany
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_MAX},
                 { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON_MAX},
                 { root+"BushWolfBody.asset", cfg.BUSHWOLF_MAX},
+                { root+"CaveDwellerBody.asset", cfg.MANEATER_MAX},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_MAX},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_MAX},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_MAX},
@@ -220,6 +224,7 @@ namespace CleaningCompany
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_MIN},
                 { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON_MIN},
                 { root+"BushWolfBody.asset", cfg.BUSHWOLF_MIN},
+                { root+"CaveDwellerBody.asset", cfg.MANEATER_MIN},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_MIN},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_MIN},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_MIN},
@@ -246,6 +251,7 @@ namespace CleaningCompany
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE},
                 { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON},
                 { root+"BushWolfBody.asset", cfg.BUSHWOLF},
+                { root+"CaveDwellerBody.asset", cfg.MANEATER},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMY},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMY},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMY},
@@ -272,6 +278,7 @@ namespace CleaningCompany
                 { root+"TulipSnakeBody.asset", cfg.TULIPSNAKE_TWOHANDED},
                 { root+"ClaySurgeonBody.asset", cfg.CLAYSURGEON_TWOHANDED},
                 { root+"BushWolfBody.asset", cfg.BUSHWOLF_TWOHANDED},
+                { root+"CaveDwellerBody.asset", cfg.MANEATER_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_TWOHANDED},
