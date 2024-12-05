@@ -17,7 +17,7 @@ namespace CleaningCompany.Patches
         private static ulong currentEnemy = 9999999;
 
         [HarmonyPrefix]
-        [HarmonyPatch("KillEnemyServerRpc")]
+        [HarmonyPatch("KillEnemyServerRpc")] 
         static void SpawnScrapBody(EnemyAI __instance)
         {
             if (currentEnemy == __instance.NetworkObject.NetworkObjectId) return;
@@ -52,7 +52,7 @@ namespace CleaningCompany.Patches
 
             publicBodyRotation = propBodyRot;
             GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
-            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn(false);
 
             if (name == "Blob")
             {
@@ -66,7 +66,7 @@ namespace CleaningCompany.Patches
             Vector3 spawnPos = propBodyPos + new Vector3(0, 1, 0);
 
             publicShotgunPrice = __instance.GetComponent<NutcrackerEnemyAI>().gun.scrapValue;
-            __instance.GetComponent<NutcrackerEnemyAI>().gun.GetComponent<NetworkObject>().Despawn(true);
+            __instance.GetComponent<NutcrackerEnemyAI>().gun.GetComponent<NetworkObject>().Despawn();
 
             List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
             foreach (Item item in itemsList)
@@ -76,7 +76,7 @@ namespace CleaningCompany.Patches
                 {
                     GameObject shotgunItem = Object.Instantiate(item.spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
                     publicShotgunRotation = propBodyRot;
-                    shotgunItem.GetComponent<NetworkObject>().Spawn();
+                    shotgunItem.GetComponent<NetworkObject>().Spawn(false);
                     break;
                 }
             }
@@ -84,7 +84,7 @@ namespace CleaningCompany.Patches
 
             GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
             publicBodyRotation = propBodyRot;
-            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn(false);
         }
 
         static IEnumerator SpawnModdedBody(EnemyAI __instance, Vector3 propBodyPos)
@@ -107,7 +107,7 @@ namespace CleaningCompany.Patches
                 gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns["ModdedEnemyPowerLevel3"].spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
             }
             publicBodyRotation = propBodyRot;
-            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn(false);
         }
     }
 }

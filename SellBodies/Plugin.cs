@@ -7,17 +7,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+#pragma warning disable IDE0051 
 
 namespace CleaningCompany
 {
     [BepInPlugin(GUID, NAME, VERSION)]
-    [BepInDependency("evaisa.lethallib", "0.14.4")]
+    [BepInDependency("evaisa.lethallib", "0.16.1")]
     public class Plugin : BaseUnityPlugin
     {
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.10.0";
+        const string VERSION = "1.10.2";
 
         static string root = "Assets/LethalCompany/SellBodies/cleaningassets/";
 
@@ -293,6 +294,7 @@ namespace CleaningCompany
                 Utilities.FixMixerGroups(body.spawnPrefab);
                 body.twoHanded = BodiesTowHanded[pair.Key];
                 body.spawnPrefab.AddComponent<BodySyncer>();
+                body.spawnPrefab.AddComponent<BodyInShip>();
                 body.maxValue = maxBodyValues[pair.Key];
                 body.minValue = minBodyValues[pair.Key];
                 body.weight = bodyWeights[pair.Key];
