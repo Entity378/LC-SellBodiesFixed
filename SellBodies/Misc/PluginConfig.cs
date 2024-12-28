@@ -27,6 +27,7 @@ namespace CleaningCompany.Misc
         public bool CLAYSURGEON { get; set; }
         public bool BUSHWOLF { get; set; }
         public bool MANEATER { get; set; }
+        public bool MASKED { get; set; }
         public bool MODDEDENEMY { get; set; }
 
         // two-handed bodies
@@ -138,7 +139,8 @@ namespace CleaningCompany.Misc
         public bool CONFETTI { get; set; }
         public bool YIPPEE { get; set; }
 
-
+        //
+        public string BLACKLISTED { get; set; }
         public PluginConfig(ConfigFile cfg)
         {
             configFile = cfg;
@@ -218,6 +220,7 @@ namespace CleaningCompany.Misc
             CLAYSURGEON = ConfigEntry("Body Enabler", "Enable selling of Barber Bodies", true, "");
             BUSHWOLF = ConfigEntry("Body Enabler", "Enable selling of Kidnapper Fox Bodies", true, "");
             MANEATER = ConfigEntry("Body Enabler", "Enable selling of Maneater Bodies", true, "");
+            MASKED = ConfigEntry("Body Enabler", "Enable selling of Masked Masks", true, "");
             MODDEDENEMY = ConfigEntry("Body Enabler", "Enable selling of Modded Enemy Bodies", true, "");
 
             CENTIPEDE_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Centipede Bodies", false, "");
@@ -274,6 +277,8 @@ namespace CleaningCompany.Misc
 
             CONFETTI = ConfigEntry("Confetti Options", "Enable Confetti", false, "");
             YIPPEE = ConfigEntry("Confetti Options", "Enable Yippe", false, "");
+
+            BLACKLISTED = ConfigEntry("Blacklist", "Blacklist", "", "");
         }
     }
 }

@@ -7,27 +7,24 @@ namespace CleaningCompany.Patches
     [HarmonyPatch(typeof(EnemyAI))]
     internal class KillEnemyPatcher
     {
-        [HarmonyPrefix]
+        [HarmonyPostfix]
         [HarmonyPatch("KillEnemy")]
         static void MoveBody(EnemyAI __instance)
         {
-            if (!__instance.isEnemyDead) 
+            string name = __instance.enemyType.enemyName;
+            if (Plugin.instance.BodySpawns.ContainsKey(name))
             {
-                string name = __instance.enemyType.enemyName;
-                if (Plugin.instance.BodySpawns.ContainsKey(name))
-                {
-                    __instance.StartCoroutine(MoveOldBody(__instance));
+                __instance.StartCoroutine(MoveOldBody(__instance));
 
-                }
-                else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name))
-                {
-                    __instance.StartCoroutine(MoveOldBody(__instance));
-                }
+            }
+            else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name) && !Plugin.instance.BlackListed.Contains(name))
+            {
+                __instance.StartCoroutine(MoveOldBody(__instance));
+            }
 
-                if (Plugin.cfg.CONFETTI)
-                {
-                    SpawnConfetti(__instance);
-                }
+            if (Plugin.cfg.CONFETTI)
+            {
+                SpawnConfetti(__instance);
             }
         }
 

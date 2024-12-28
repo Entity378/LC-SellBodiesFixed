@@ -18,7 +18,7 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.10.2";
+        const string VERSION = "1.10.4";
 
         static string root = "Assets/LethalCompany/SellBodies/cleaningassets/";
 
@@ -89,6 +89,8 @@ namespace CleaningCompany
             "Bush Wolf",
             "Maneater",
         };
+
+        public List<string> BlackListed = new List<string>();
 
         public List<GameObject> tools = new List<GameObject>();
 
@@ -284,6 +286,13 @@ namespace CleaningCompany
                 { root+"ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_TWOHANDED},
                 { root+"ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_TWOHANDED},
             };
+
+            string[] blackList = cfg.BLACKLISTED.Split(',');
+
+            foreach (string enemy in blackList)
+            {
+                BlackListed.Add(enemy);
+            }
         }
 
         void SetupScrap()

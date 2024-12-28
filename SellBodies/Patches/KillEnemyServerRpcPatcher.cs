@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using GameNetcodeStuff;
+using System.Linq;
 
 namespace CleaningCompany.Patches
 {
@@ -12,6 +13,7 @@ namespace CleaningCompany.Patches
     {
         public static Quaternion publicBodyRotation;
         public static Quaternion publicShotgunRotation;
+        public static Quaternion publicMaskRotation;
         public static int publicShotgunPrice;
 
         private static ulong currentEnemy = 9999999;
@@ -38,7 +40,11 @@ namespace CleaningCompany.Patches
                     __instance.StartCoroutine(SpawnGenericBody(__instance, name, propBodyPos));
                 }
             }
-            else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name))
+            else if (name == "Masked" && Plugin.cfg.MASKED)
+            {
+                __instance.StartCoroutine(SpawnMask(__instance));
+            }
+            else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name) && !Plugin.instance.BlackListed.Contains(name))
             {
                 __instance.StartCoroutine(SpawnModdedBody(__instance, propBodyPos));
             }
@@ -52,7 +58,7 @@ namespace CleaningCompany.Patches
 
             publicBodyRotation = propBodyRot;
             GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
-            gameObjectCreated.GetComponent<NetworkObject>().Spawn(false);
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
 
             if (name == "Blob")
             {
@@ -76,7 +82,7 @@ namespace CleaningCompany.Patches
                 {
                     GameObject shotgunItem = Object.Instantiate(item.spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
                     publicShotgunRotation = propBodyRot;
-                    shotgunItem.GetComponent<NetworkObject>().Spawn(false);
+                    shotgunItem.GetComponent<NetworkObject>().Spawn();
                     break;
                 }
             }
@@ -84,7 +90,19 @@ namespace CleaningCompany.Patches
 
             GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
             publicBodyRotation = propBodyRot;
-            gameObjectCreated.GetComponent<NetworkObject>().Spawn(false);
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
+        }
+
+        static IEnumerator SpawnMask(EnemyAI __instance) 
+        {
+            yield return new WaitForSeconds(0.1f);
+            MaskedPlayerEnemy masked = __instance.GetComponent<MaskedPlayerEnemy>();
+            var maskToSpawn = masked.maskTypes[0].activeSelf ? ItemsPatcher.comedyMask : ItemsPatcher.tragedyMask;
+            Vector3 spawnPos = __instance.transform.position + new Vector3(0, 2.5f, 0);
+            Quaternion propBodyRot = __instance.transform.rotation;
+            publicMaskRotation = propBodyRot;
+            GameObject gameObjectCreated = Object.Instantiate(maskToSpawn.spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
         }
 
         static IEnumerator SpawnModdedBody(EnemyAI __instance, Vector3 propBodyPos)
@@ -107,7 +125,7 @@ namespace CleaningCompany.Patches
                 gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns["ModdedEnemyPowerLevel3"].spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
             }
             publicBodyRotation = propBodyRot;
-            gameObjectCreated.GetComponent<NetworkObject>().Spawn(false);
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
         }
     }
 }

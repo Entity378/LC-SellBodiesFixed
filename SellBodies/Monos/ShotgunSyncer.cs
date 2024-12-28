@@ -44,7 +44,7 @@ namespace CleaningCompany.Monos
             yield return new WaitForSeconds(0);
             while (!prop.hasHitGround && prop.playerHeldBy == null)
             {
-                Debug.Log("Waiting for the body to hit the ground");
+                Debug.Log("Waiting for the shotgun to hit the ground");
             }
 
             if(prop.playerHeldBy == null) 
