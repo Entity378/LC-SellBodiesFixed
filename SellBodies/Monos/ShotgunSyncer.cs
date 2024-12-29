@@ -7,25 +7,25 @@ namespace CleaningCompany.Monos
 {
     internal class ShotgunSyncer : NetworkBehaviour
     {
+        public ShotgunItem prop;
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
 
+            prop = GetComponent<ShotgunItem>();
             if (IsHost || IsServer)
             {
                 Quaternion shotgunRotation = KillEnemyServerRpcPatcher.publicShotgunRotation;
-                ShotgunItem prop = GetComponent<ShotgunItem>();
                 int price = KillEnemyServerRpcPatcher.publicShotgunPrice;
                 int ammo = 2;
-                SyncDetailsClientRpc(price, shotgunRotation, ammo, new NetworkBehaviourReference(prop));
+                SyncDetailsClientRpc(price, shotgunRotation, ammo);
                 Debug.Log("End of OnNetworkSpawn shotgun override");
             }
         }
 
         [ClientRpc]
-        void SyncDetailsClientRpc(int price, Quaternion rot, int ammo, NetworkBehaviourReference netRef)
+        void SyncDetailsClientRpc(int price, Quaternion rot, int ammo)
         {
-            netRef.TryGet(out ShotgunItem prop);
             if (prop != null)
             {
                 prop.shellsLoaded = ammo;

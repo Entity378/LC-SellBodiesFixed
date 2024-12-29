@@ -7,24 +7,24 @@ namespace CleaningCompany.Monos
 {
     internal class MaskSyncer : NetworkBehaviour
     {
+        public HauntedMaskItem prop;
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
 
+            prop = GetComponent<HauntedMaskItem>();
             if (IsHost || IsServer)
             {
                 Quaternion maskRotation = KillEnemyServerRpcPatcher.publicMaskRotation;
-                HauntedMaskItem prop = GetComponent<HauntedMaskItem>();
                 int price = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
-                SyncDetailsClientRpc(price, maskRotation, new NetworkBehaviourReference(prop));
+                SyncDetailsClientRpc(price, maskRotation);
                 Debug.Log("End of OnNetworkSpawn mask override");
             }
         }
 
         [ClientRpc]
-        void SyncDetailsClientRpc(int price, Quaternion rot, NetworkBehaviourReference netRef)
+        void SyncDetailsClientRpc(int price, Quaternion rot)
         {
-            netRef.TryGet(out HauntedMaskItem prop);
             if (prop != null)
             {
                 prop.scrapValue = price;

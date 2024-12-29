@@ -18,7 +18,7 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.10.4";
+        const string VERSION = "1.11.0";
 
         static string root = "Assets/LethalCompany/SellBodies/cleaningassets/";
 
