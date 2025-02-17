@@ -52,13 +52,13 @@ namespace CleaningCompany.Monos
 
         static IEnumerator RotateBodyClient(PhysicsProp prop, Quaternion rot)
         {
-            yield return new WaitForSeconds(0);
-            while (!prop.hasHitGround && prop.playerHeldBy == null)
+            yield return new WaitForSeconds(0.1f);
+            /*while (!prop.hasHitGround && prop.playerHeldBy == null)
             {
                 Debug.Log("Waiting for the body to hit the ground");
-            }
+            }*/
 
-            if (prop.playerHeldBy == null)
+            if (prop.playerHeldBy == null && rot != null)
             {
                 prop.GetComponent<Transform>().transform.SetPositionAndRotation(prop.transform.position, rot);
                 KillEnemyServerRpcPatcher.publicBodyRotation = new Quaternion();

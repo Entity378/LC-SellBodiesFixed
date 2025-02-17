@@ -18,7 +18,7 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.11.0";
+        const string VERSION = "1.12.1";
 
         static string root = "Assets/LethalCompany/SellBodies/cleaningassets/";
 
@@ -60,6 +60,7 @@ namespace CleaningCompany
         };
 
         public Dictionary<string, Item> BodySpawns = new Dictionary<string, Item>();
+        public Item EE;
 
         public List<string> VanillaBody = new List<string>()
         {
@@ -91,8 +92,6 @@ namespace CleaningCompany
         };
 
         public List<string> BlackListed = new List<string>();
-
-        public List<GameObject> tools = new List<GameObject>();
 
         AssetBundle bundle;
 
@@ -131,6 +130,7 @@ namespace CleaningCompany
             Cheer = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/Cheer.ogg");
             Yippee = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/Yippee.ogg");
             POP = bundle.LoadAsset<AudioClip>("Assets/LethalCompany/SellBodies/EE/POP.ogg");
+
             if (cfg.YIPPEE)
             {
                 confettiPrefab.AddComponent<AudioSource>().clip = Yippee;
@@ -140,6 +140,13 @@ namespace CleaningCompany
                 confettiPrefab.AddComponent<AudioSource>().clip = Cheer;
             }
             confettiPrefab.GetComponent<AudioSource>().playOnAwake = true;
+
+            EE = bundle.LoadAsset<Item>("Assets/LethalCompany/SellBodies/cleaningassets/AFriend'sMemorial.asset");
+            Utilities.FixMixerGroups(EE.spawnPrefab);
+            EE.spawnPrefab.AddComponent<BodySyncer>();
+            EE.spawnPrefab.AddComponent<BodyInShip>();
+            NetworkPrefabs.RegisterNetworkPrefab(EE.spawnPrefab);
+            Items.RegisterItem(EE);
 
             instance = this;
 

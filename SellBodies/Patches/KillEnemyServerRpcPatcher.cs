@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using GameNetcodeStuff;
-using System.Linq;
 
 namespace CleaningCompany.Patches
 {
@@ -14,7 +13,7 @@ namespace CleaningCompany.Patches
         public static Quaternion publicBodyRotation;
         public static Quaternion publicShotgunRotation;
         public static Quaternion publicMaskRotation;
-        public static int publicShotgunPrice;
+        public static int publicShotgunPrice = 60;
 
         private static ulong currentEnemy = 9999999;
 
@@ -28,6 +27,12 @@ namespace CleaningCompany.Patches
             currentEnemy = __instance.NetworkObject.NetworkObjectId;
             string name = __instance.enemyType.enemyName;
             Vector3 propBodyPos = __instance.transform.position;
+
+            if (Random.Range(1, 100001) == 1)
+            {
+                __instance.StartCoroutine(SpawnEE(__instance, name, propBodyPos));
+                return;
+            }
 
             if (Plugin.instance.BodySpawns.ContainsKey(name))
             {
@@ -97,7 +102,19 @@ namespace CleaningCompany.Patches
         {
             yield return new WaitForSeconds(0.1f);
             MaskedPlayerEnemy masked = __instance.GetComponent<MaskedPlayerEnemy>();
-            var maskToSpawn = masked.maskTypes[0].activeSelf ? ItemsPatcher.comedyMask : ItemsPatcher.tragedyMask;
+            Item maskToSpawn = masked.maskTypes[0].activeSelf ? ItemsPatcher.comedyMask : ItemsPatcher.tragedyMask;
+            if (maskToSpawn != ItemsPatcher.comedyMask && maskToSpawn != ItemsPatcher.tragedyMask) 
+            {
+                int randomMask = Random.Range(0, 2);
+                if(randomMask == 0) 
+                {
+                    maskToSpawn = ItemsPatcher.tragedyMask;
+                }
+                else 
+                {
+                    maskToSpawn = ItemsPatcher.comedyMask;
+                }
+            }
             Vector3 spawnPos = __instance.transform.position + new Vector3(0, 2.5f, 0);
             Quaternion propBodyRot = __instance.transform.rotation;
             publicMaskRotation = propBodyRot;
@@ -126,6 +143,22 @@ namespace CleaningCompany.Patches
             }
             publicBodyRotation = propBodyRot;
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
+        }
+
+        static IEnumerator SpawnEE(EnemyAI __instance, string name, Vector3 propBodyPos)
+        {
+            Quaternion propBodyRot = __instance.transform.rotation;
+            Vector3 spawnPos = propBodyPos + new Vector3(0, 1, 0);
+            yield return new WaitForSeconds(4);
+
+            publicBodyRotation = propBodyRot;
+            GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.EE.spawnPrefab, spawnPos, propBodyRot, RoundManager.Instance.mapPropsContainer.transform);
+            gameObjectCreated.GetComponent<NetworkObject>().Spawn();
+
+            if (name == "Blob")
+            {
+                __instance.GetComponent<NetworkObject>().Despawn();
+            }
         }
     }
 }
