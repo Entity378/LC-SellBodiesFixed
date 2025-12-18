@@ -1,9 +1,9 @@
 using HarmonyLib;
-using CleaningCompany.Monos;
 using System.Linq;
 using UnityEngine;
+using SellBodies.Monos;
 
-namespace CleaningCompany.Patches
+namespace SellBodies.Patches
 {
     [HarmonyPatch(typeof(StartOfRound))]
     internal class ItemsPatcher

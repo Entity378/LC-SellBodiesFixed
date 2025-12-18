@@ -1,7 +1,7 @@
 using HarmonyLib;
 using UnityEngine;
 
-namespace CleaningCompany.Patches
+namespace SellBodies.Patches
 {
     [HarmonyPatch(typeof(MaskedPlayerEnemy))]
     internal class KillMaskedPatcher

@@ -1,20 +1,19 @@
-using CleaningCompany.Patches;
-using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace CleaningCompany.Monos
+namespace SellBodies.Monos
 {
-    internal class BodySyncer : NetworkBehaviour
+    internal class BodySyncer : SyncScript
     {
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            prop = GetComponent<PhysicsProp>();
+
+            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
 
             if (IsHost || IsServer)
             {
-                Quaternion bodyRotation = KillEnemyServerRpcPatcher.publicBodyRotation;
-                PhysicsProp prop = GetComponent<PhysicsProp>();
                 int priceBase = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
                 int totalPowerCount;
                 float priceMuliplier;
@@ -30,39 +29,22 @@ namespace CleaningCompany.Monos
                 {
                     price = priceBase;
                 }
-                SyncDetailsClientRpc(price, bodyRotation, new NetworkBehaviourReference(prop));
+                SyncDetailsClientRpc(price);
                 Debug.Log("End of OnNetworkSpawn body override");
             }
         }
 
         [ClientRpc]
-        void SyncDetailsClientRpc(int price, Quaternion rot, NetworkBehaviourReference netRef)
+        void SyncDetailsClientRpc(int price)
         {
-            netRef.TryGet(out PhysicsProp prop);
             if (prop != null)
             {
                 prop.scrapValue = price;
                 prop.itemProperties.creditsWorth = price;
                 prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${price}";
                 Debug.Log("Successfully synced body values");
-                StartCoroutine(RotateBodyClient(prop, rot));
             }
             else Debug.LogError("Failed to resolve network reference!");
-        }
-
-        static IEnumerator RotateBodyClient(PhysicsProp prop, Quaternion rot)
-        {
-            yield return new WaitForSeconds(0.1f);
-            /*while (!prop.hasHitGround && prop.playerHeldBy == null)
-            {
-                Debug.Log("Waiting for the body to hit the ground");
-            }*/
-
-            if (prop.playerHeldBy == null && rot != null)
-            {
-                prop.GetComponent<Transform>().transform.SetPositionAndRotation(prop.transform.position, rot);
-                KillEnemyServerRpcPatcher.publicBodyRotation = new Quaternion();
-            }
         }
     }
 }

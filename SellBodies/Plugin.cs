@@ -1,15 +1,14 @@
 using BepInEx;
 using CleaningCompany.Misc;
-using CleaningCompany.Monos;
 using HarmonyLib;
 using LethalLib.Modules;
+using SellBodies.Monos;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
-#pragma warning disable IDE0051 
 
-namespace CleaningCompany
+namespace SellBodies
 {
     [BepInPlugin(GUID, NAME, VERSION)]
     [BepInDependency("evaisa.lethallib", "0.16.1")]
@@ -18,7 +17,7 @@ namespace CleaningCompany
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.12.1";
+        const string VERSION = "1.12.4";
 
         static string root = "Assets/LethalCompany/SellBodies/cleaningassets/";
 
@@ -144,7 +143,6 @@ namespace CleaningCompany
             EE = bundle.LoadAsset<Item>("Assets/LethalCompany/SellBodies/cleaningassets/AFriend'sMemorial.asset");
             Utilities.FixMixerGroups(EE.spawnPrefab);
             EE.spawnPrefab.AddComponent<BodySyncer>();
-            EE.spawnPrefab.AddComponent<BodyInShip>();
             NetworkPrefabs.RegisterNetworkPrefab(EE.spawnPrefab);
             Items.RegisterItem(EE);
 
@@ -310,7 +308,6 @@ namespace CleaningCompany
                 Utilities.FixMixerGroups(body.spawnPrefab);
                 body.twoHanded = BodiesTowHanded[pair.Key];
                 body.spawnPrefab.AddComponent<BodySyncer>();
-                body.spawnPrefab.AddComponent<BodyInShip>();
                 body.maxValue = maxBodyValues[pair.Key];
                 body.minValue = minBodyValues[pair.Key];
                 body.weight = bodyWeights[pair.Key];

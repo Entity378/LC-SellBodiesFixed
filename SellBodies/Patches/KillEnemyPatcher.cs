@@ -2,7 +2,7 @@ using HarmonyLib;
 using UnityEngine;
 using System.Collections;
 
-namespace CleaningCompany.Patches
+namespace SellBodies.Patches
 {
     [HarmonyPatch(typeof(EnemyAI))]
     internal class KillEnemyPatcher
@@ -48,10 +48,9 @@ namespace CleaningCompany.Patches
 
         static void SpawnConfetti(EnemyAI __instance)
         {
-            if(__instance != null) 
+            if(__instance != null)
             {
-                Object.Instantiate(Plugin.confettiPrefab, __instance.transform.position, Quaternion.Euler(0f, 0f, 0f),
-                RoundManager.Instance.mapPropsContainer.transform).SetActive(value: true);
+                Object.Instantiate(Plugin.confettiPrefab, __instance.transform.position, Quaternion.Euler(0f, 0f, 0f)).SetActive(value: true);
             }
             else
             {
