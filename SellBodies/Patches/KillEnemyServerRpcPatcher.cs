@@ -26,9 +26,7 @@ namespace SellBodies.Patches
             Vector3 propBodyPos = __instance.transform.position;
             Quaternion propBodyRot = __instance.transform.rotation;
 
-            Debug.Log("ROTATION KKK : " + propBodyRot);
-
-            if (Random.Range(1, 100001) == 1)
+            if (Random.Range(0, 100) == 78)
             {
                 __instance.StartCoroutine(SpawnEE(__instance, name, propBodyPos, propBodyRot));
                 return;
@@ -141,7 +139,7 @@ namespace SellBodies.Patches
             Vector3 spawnPos = propBodyPos + new Vector3(0, 1, 0);
             yield return new WaitForSeconds(4);
 
-            GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.EE.spawnPrefab, spawnPos, propBodyRot);
+            GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.GameboyCartridge.spawnPrefab, spawnPos, propBodyRot);
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
 
             if (name == "Blob")

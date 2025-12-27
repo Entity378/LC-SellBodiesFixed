@@ -130,17 +130,18 @@ namespace CleaningCompany.Misc
         public float MODDEDENEMYPOWERLEVEL2_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL3_WEIGHT { get; set; }
 
-        //body value multiplier
+        // body value multiplier
         public float MULTIPLIER_VALUE { get; set; }
         public float MULTIPLIER_POWER_COUNT_SUBTRACTION { get; set; }
         public bool DISABLE_MULTIPLIER { get; set; }
 
-        //confetti
+        // confetti
         public bool CONFETTI { get; set; }
         public bool YIPPEE { get; set; }
 
-        //
+        // blacklist
         public string BLACKLISTED { get; set; }
+
         public PluginConfig(ConfigFile cfg)
         {
             configFile = cfg;

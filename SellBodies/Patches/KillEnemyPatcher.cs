@@ -50,7 +50,7 @@ namespace SellBodies.Patches
         {
             if(__instance != null)
             {
-                Object.Instantiate(Plugin.confettiPrefab, __instance.transform.position, Quaternion.Euler(0f, 0f, 0f)).SetActive(value: true);
+                Object.Instantiate(Plugin.ConfettiPrefab, __instance.transform.position, Quaternion.Euler(0f, 0f, 0f)).SetActive(value: true);
             }
             else
             {
