@@ -1,4 +1,5 @@
 ﻿using Unity.Netcode;
+using UnityEngine;
 
 namespace SellBodies.Monos
 {
@@ -6,5 +7,6 @@ namespace SellBodies.Monos
     {
         public GrabbableObject prop;
         public bool justSpawned = true;
+        public Quaternion spawnRotation;
     }
 }

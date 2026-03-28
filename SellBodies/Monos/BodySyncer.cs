@@ -10,25 +10,41 @@ namespace SellBodies.Monos
             base.OnNetworkSpawn();
             prop = GetComponent<PhysicsProp>();
 
-            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+            spawnRotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+            transform.rotation = spawnRotation;
 
             if (IsHost || IsServer)
             {
-                int priceBase = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
-                int totalPowerCount;
-                float priceMuliplier;
                 int price;
+                int priceBase = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
 
-                if (Plugin.cfg.DISABLE_MULTIPLIER == false)
+                if (Plugin.cfg.MULTIPLIER)
                 {
-                    totalPowerCount = StartOfRound.Instance.currentLevel.maxEnemyPowerCount + StartOfRound.Instance.currentLevel.maxOutsideEnemyPowerCount;
-                    priceMuliplier = (totalPowerCount - Plugin.cfg.MULTIPLIER_POWER_COUNT_SUBTRACTION) / 100f * Plugin.cfg.MULTIPLIER_VALUE;
-                    price = priceBase + (int)(priceBase * priceMuliplier);
+                    float powerFactor = 1;
+                    float vanillaFactor = 1;
+                    float baseFactor = Plugin.cfg.MULTIPLIER_VALUE;
+
+                    if (Plugin.cfg.ENEMY_MULTIPLIER) 
+                    {
+                        SelectableLevel currentLevel = StartOfRound.Instance.currentLevel;
+                        int totalPowerCount = currentLevel.maxEnemyPowerCount + currentLevel.maxOutsideEnemyPowerCount;
+                        powerFactor = 1 + (totalPowerCount - 10) / 100f;
+                    }
+
+                    if (Plugin.cfg.VANILLA_MULTIPLIER)
+                    {
+                        float vanillaMultiplier = RoundManager.Instance.scrapValueMultiplier;
+                        vanillaFactor = vanillaMultiplier * 2.5f;
+                    }
+
+                    float priceMultiplier = powerFactor * vanillaFactor * baseFactor;
+                    price = (int)(priceBase * priceMultiplier);
                 }
                 else
                 {
                     price = priceBase;
                 }
+
                 SyncDetailsClientRpc(price);
                 Debug.Log("End of OnNetworkSpawn body override");
             }

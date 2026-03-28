@@ -1,4 +1,8 @@
+using SellBodies;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Video;
 
 public class GameBoyScript : GrabbableObject
 {
@@ -8,9 +12,10 @@ public class GameBoyScript : GrabbableObject
     public GameObject gameboyBackground;
 
     public Material gameboyCartrigeMat;
-    public Material gameboyBackgroundMat;
 
-    public AudioClip gameboyCartridgeSFX;
+    public VideoPlayer gameboyVideoPlayer;
+    public VideoClip gameboyVideoClip;
+
     public AudioClip errorSFX;
     public AudioClip useButtonSFX;
     public AudioClip dropSFX;
@@ -27,6 +32,23 @@ public class GameBoyScript : GrabbableObject
             gameboyCartrige.SetActive(false);
             gameboyBackground.SetActive(false);
         }
+    }
+    public override void Update()
+    {
+        base.Update();
+        if (playerHeldBy != null && !isPocketed) 
+        {
+            if (!playerHeldBy.isGrabbingObjectAnimation && 
+                !playerHeldBy.isTypingChat && 
+                !playerHeldBy.inTerminalMenu && 
+                !playerHeldBy.inSpecialInteractAnimation && 
+                playerHeldBy.hoveringOverTrigger == null)
+            {
+                SetupKeyCallbacks();
+                return;
+            }
+        }
+        StopKeyCallbacks();
     }
 
     public override void GrabItem()
@@ -52,6 +74,20 @@ public class GameBoyScript : GrabbableObject
         playerHeldBy.equippedUsableItemQE = false;
         base.PocketItem();
     }
+    public void SetupKeyCallbacks()
+    {
+        Plugin.InputActionsInstance.LoadCartridgeKey.performed += LoadCartridge;
+        Plugin.InputActionsInstance.VolumeUpKey.performed += VolumeUp;
+        Plugin.InputActionsInstance.VolumeDownKey.performed += VolumeDown;
+    }
+
+    public void StopKeyCallbacks()
+    {
+        Plugin.InputActionsInstance.LoadCartridgeKey.performed -= LoadCartridge;
+        Plugin.InputActionsInstance.VolumeUpKey.performed -= VolumeUp;
+        Plugin.InputActionsInstance.VolumeDownKey.performed -= VolumeDown;
+    }
+
 
     public override void ItemActivate(bool used, bool buttonDown = true)
     {
@@ -60,86 +96,170 @@ public class GameBoyScript : GrabbableObject
         {
             if (hasCartrige)
             {
-                if (audio.isPlaying)
+                if (gameboyVideoPlayer.isPlaying)
                 {
                     gameboyBackground.SetActive(false);
-                    audio.Pause();
+                    gameboyVideoPlayer.Pause();
                 }
                 else
                 {
                     gameboyBackground.SetActive(true);
-                    audio.UnPause();
-                    if (audio.time > 0f)
+                    if (gameboyVideoPlayer.frame > 0)
                     {
-                        audio.UnPause();
+                        gameboyVideoPlayer.Play();
                     }
                     else
                     {
-                        audio.loop = true;
-                        audio.clip = gameboyCartridgeSFX;
-                        audio.Play();
+                        gameboyVideoPlayer.clip = gameboyVideoClip;
+                        gameboyVideoPlayer.frame = 0;
+                        gameboyVideoPlayer.Play();
                     }
                 }
             }
         }
     }
 
-    public override void ItemInteractLeftRight(bool right)
+    public void VolumeUp(InputAction.CallbackContext VolumeUpContext)
     {
-        base.ItemInteractLeftRight(right);
-        if (right)
+        if (!VolumeUpContext.performed || playerHeldBy == null) return;
+        audio.volume = Mathf.Clamp(audio.volume + 0.1f, 0f, 1f);
+        VolumeUpServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void VolumeUpServerRpc()
+    {
+        VolumeUpClientRpc();
+    }
+
+    [ClientRpc]
+    private void VolumeUpClientRpc()
+    {
+        if (IsOwner) return;
+        audio.volume = Mathf.Clamp(audio.volume + 0.1f, 0f, 1f);
+    }
+
+    public void VolumeDown(InputAction.CallbackContext VolumeDownContext)
+    {
+        if (!VolumeDownContext.performed || playerHeldBy == null) return;
+        audio.volume = Mathf.Clamp(audio.volume - 0.1f, 0f, 1f);
+        VolumeDownServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void VolumeDownServerRpc()
+    {
+        VolumeDownClientRpc();
+    }
+
+    [ClientRpc]
+    private void VolumeDownClientRpc()
+    {
+        if (IsOwner) return;
+        audio.volume = Mathf.Clamp(audio.volume - 0.1f, 0f, 1f);
+    }
+
+    public void LoadCartridge(InputAction.CallbackContext LoadCartridgeContext)
+    {
+        if (!LoadCartridgeContext.performed || playerHeldBy == null) return;
+
+        if (!hasCartrige)
         {
-            if (!hasCartrige)
+            int cartrigeIndex = getCartrigeInventorySlot();
+            if (cartrigeIndex != -1)
             {
-                int cartrigeIndex = getCartrigeInventorySlot();
-                if (cartrigeIndex != -1)
-                {
-                    GameBoyCartridgeScript cartridgeInInventory = playerHeldBy.ItemSlots[cartrigeIndex].GetComponent<GameBoyCartridgeScript>();
-                    insertedCartridge = cartridgeInInventory;
-
-                    gameboyCartrigeMat = cartridgeInInventory.cartrigeMat;
-                    gameboyBackgroundMat.mainTexture = cartridgeInInventory.cartrigeBackground;
-                    gameboyCartridgeSFX = cartridgeInInventory.gameboyCartridgeSFX;
-
-                    if (IsOwner)
-                    {
-                        HUDManager.Instance.itemSlotIcons[cartrigeIndex].enabled = false;
-                    }
-
-                    playerHeldBy.ItemSlots[cartrigeIndex] = null;
-                    insertedCartridge.gameObject.SetActive(false);
-                    gameboyCartrige.SetActive(true);
-                    hasCartrige = true;
-                }
-            }
-            else
-            {
-                gameboyCartrige.SetActive(false);
-                gameboyBackground.SetActive(false);
-                insertedCartridge.gameObject.SetActive(true);
-
-                audio.loop = false;
-                audio.Stop();
-
-                int freeSlot = GetFreeInventorySlot();
-
-                if (freeSlot != -1)
-                {
-                    playerHeldBy.ItemSlots[freeSlot] = insertedCartridge;
-                    if (IsOwner) 
-                    {
-                        HUDManager.Instance.itemSlotIcons[freeSlot].enabled = true;
-                    }
-                }
-                else
-                {
-                    DropItem(insertedCartridge);
-                }
-
-                insertedCartridge = null;
-                hasCartrige = false;
+                ExecuteLoadCartridge(cartrigeIndex);
+                LoadCartridgeServerRpc(cartrigeIndex);
             }
         }
+        else
+        {
+            ExecuteUnloadCartridge();
+            UnloadCartridgeServerRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void LoadCartridgeServerRpc(int cartrigeIndex)
+    {
+        LoadCartridgeClientRpc(cartrigeIndex);
+    }
+
+    [ClientRpc]
+    private void LoadCartridgeClientRpc(int cartrigeIndex)
+    {
+        if (IsOwner) return;
+        ExecuteLoadCartridge(cartrigeIndex);
+    }
+
+    private void ExecuteLoadCartridge(int cartrigeIndex)
+    {
+        if (playerHeldBy == null) return;
+
+        GameBoyCartridgeScript cartridgeInInventory = playerHeldBy.ItemSlots[cartrigeIndex].GetComponent<GameBoyCartridgeScript>();
+        insertedCartridge = cartridgeInInventory;
+
+        gameboyCartrigeMat = cartridgeInInventory.cartrigeMat;
+        gameboyVideoClip = cartridgeInInventory.videoClip;
+
+        var renderers = gameboyCartrige.GetComponentsInChildren<MeshRenderer>();
+
+        foreach (var r in renderers)
+        {
+            r.material = gameboyCartrigeMat;
+        }
+
+        if (IsOwner)
+        {
+            HUDManager.Instance.itemSlotIcons[cartrigeIndex].enabled = false;
+        }
+
+        playerHeldBy.ItemSlots[cartrigeIndex] = null;
+        insertedCartridge.gameObject.SetActive(false);
+        gameboyCartrige.SetActive(true);
+        hasCartrige = true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UnloadCartridgeServerRpc()
+    {
+        UnloadCartridgeClientRpc();
+    }
+
+    [ClientRpc]
+    private void UnloadCartridgeClientRpc()
+    {
+        if (IsOwner) return;
+        ExecuteUnloadCartridge();
+    }
+
+    private void ExecuteUnloadCartridge()
+    {
+        if (playerHeldBy == null) return;
+
+        gameboyCartrige.SetActive(false);
+        gameboyBackground.SetActive(false);
+        insertedCartridge.gameObject.SetActive(true);
+
+        gameboyVideoPlayer.Stop();
+
+        int freeSlot = GetFreeInventorySlot();
+
+        if (freeSlot != -1)
+        {
+            playerHeldBy.ItemSlots[freeSlot] = insertedCartridge;
+            if (IsOwner)
+            {
+                HUDManager.Instance.itemSlotIcons[freeSlot].enabled = true;
+            }
+        }
+        else
+        {
+            DropItem(insertedCartridge);
+        }
+
+        insertedCartridge = null;
+        hasCartrige = false;
     }
 
     public int getCartrigeInventorySlot()

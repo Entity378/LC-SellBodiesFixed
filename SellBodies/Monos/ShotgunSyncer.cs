@@ -11,15 +11,17 @@ namespace SellBodies.Monos
             base.OnNetworkSpawn();
             prop = GetComponent<ShotgunItem>();
 
-            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 90f);
+            spawnRotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 90f);
+            transform.rotation = spawnRotation;
 
             if (IsHost || IsServer)
             {
                 int price = 60;
-                if (KillEnemyServerRpcPatcher.publicShotgunPrice != 0)
+                if (Plugin.cfg.SHOTGUN_PRICE && KillEnemyServerRpcPatcher.publicShotgunPrice != 0)
                 {
                     price = KillEnemyServerRpcPatcher.publicShotgunPrice;
                 }
+
                 int ammo = 2;
                 SyncDetailsClientRpc(price, ammo);
                 Debug.Log("End of OnNetworkSpawn shotgun override");

@@ -26,7 +26,7 @@ namespace SellBodies.Patches
             Vector3 propBodyPos = __instance.transform.position;
             Quaternion propBodyRot = __instance.transform.rotation;
 
-            if (Random.Range(0, 100) == 78)
+            if (Random.Range(0, 150) == 78)
             {
                 __instance.StartCoroutine(SpawnEE(__instance, name, propBodyPos, propBodyRot));
                 return;
@@ -42,14 +42,19 @@ namespace SellBodies.Patches
                 {
                     __instance.StartCoroutine(SpawnGenericBody(__instance, name, propBodyPos, propBodyRot));
                 }
+                return;
             }
-            else if (name == "Masked" && Plugin.cfg.MASKED)
+
+            if (name == "Masked" && Plugin.cfg.MASKED)
             {
                 __instance.StartCoroutine(SpawnMask(__instance, propBodyPos, propBodyRot));
+                return;
             }
-            else if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name) && !Plugin.instance.BlackListed.Contains(name))
+
+            if (Plugin.cfg.MODDEDENEMY && !Plugin.instance.VanillaBody.Contains(name) && !Plugin.instance.BlackListed.Contains(name))
             {
                 __instance.StartCoroutine(SpawnModdedBody(__instance, propBodyPos, propBodyRot));
+                return;
             }
         }
 
@@ -139,7 +144,17 @@ namespace SellBodies.Patches
             Vector3 spawnPos = propBodyPos + new Vector3(0, 1, 0);
             yield return new WaitForSeconds(4);
 
-            GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.GameboyCartridge.spawnPrefab, spawnPos, propBodyRot);
+            GameObject gameObjectCreated = new();
+
+            if (Random.Range(0, 2) == 1)
+            {
+                gameObjectCreated = Object.Instantiate(Plugin.instance.GameboyCartridgeRDA.spawnPrefab, spawnPos, propBodyRot);
+            }
+            else 
+            {
+                gameObjectCreated = Object.Instantiate(Plugin.instance.GameboyCartridgeRITN.spawnPrefab, spawnPos, propBodyRot);
+            }
+
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
 
             if (name == "Blob")

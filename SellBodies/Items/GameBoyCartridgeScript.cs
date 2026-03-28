@@ -1,17 +1,16 @@
 using UnityEngine;
+using UnityEngine.Video;
 
 public class GameBoyCartridgeScript : GrabbableObject
 {
     public Material cartrigeMat;
-    public Texture2D cartrigeBackground;
+    public VideoClip videoClip;
 
-    public AudioClip gameboyCartridgeSFX;
-    public AudioClip dropSFX;
-    public AudioClip grabSFX;
 
     public override void Start()
     {
         base.Start();
+        scrapValue = 378;
     }
 
     public override void DiscardItem()

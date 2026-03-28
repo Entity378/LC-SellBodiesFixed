@@ -131,13 +131,17 @@ namespace CleaningCompany.Misc
         public float MODDEDENEMYPOWERLEVEL3_WEIGHT { get; set; }
 
         // body value multiplier
-        public float MULTIPLIER_VALUE { get; set; }
-        public float MULTIPLIER_POWER_COUNT_SUBTRACTION { get; set; }
-        public bool DISABLE_MULTIPLIER { get; set; }
+        public bool MULTIPLIER { get; set; }
+        public float MULTIPLIER_VALUE { get; set; } 
+        public bool ENEMY_MULTIPLIER { get; set; }
+        public bool VANILLA_MULTIPLIER { get; set; }
 
         // confetti
         public bool CONFETTI { get; set; }
         public bool YIPPEE { get; set; }
+
+        // Misc
+        public bool SHOTGUN_PRICE { get; set; }
 
         // blacklist
         public string BLACKLISTED { get; set; }
@@ -272,13 +276,15 @@ namespace CleaningCompany.Misc
             MODDEDENEMYPOWERLEVEL2_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 2 PowerLevel", 1.52f, "");
             MODDEDENEMYPOWERLEVEL3_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 3 Or Higher PowerLevel", 1.86f, "");
 
-            MULTIPLIER_VALUE = ConfigEntry("Multiplier Options", "Multiplier Value", 4f, "Is used in the formula to calculate the multiplier (Muliplier = ((Total Power Count - Power Count Subtraction) / 100) * Multiplier Value))");
-            MULTIPLIER_POWER_COUNT_SUBTRACTION = ConfigEntry("Multiplier Options", "Power Count Subtraction", 10f, "Is used in the formula to calculate the multiplier (Muliplier = ((Total Power Count - Power Count Subtraction) / 100) * Multiplier Value))");
-            DISABLE_MULTIPLIER = ConfigEntry("Multiplier Options", "Disable Multiplier", false, "");
+            MULTIPLIER = ConfigEntry("Multiplier Options", "Enable Multiplier", true, "");
+            MULTIPLIER_VALUE = ConfigEntry("Multiplier Options", "Multiplier Value", 1f, "");
+            ENEMY_MULTIPLIER = ConfigEntry("Multiplier Options", "Enemy Multiplier", true, "Applies a multiplier based on how many enemies can spawn on the moon (power level)");
+            VANILLA_MULTIPLIER = ConfigEntry("Multiplier Options", "Vanilla Multiplier", true, "Applies a multiplier based on the vanilla multiplier (used by other mods)");
 
             CONFETTI = ConfigEntry("Confetti Options", "Enable Confetti", false, "");
             YIPPEE = ConfigEntry("Confetti Options", "Enable Yippe", false, "");
 
+            SHOTGUN_PRICE = ConfigEntry("Misc", "Shotgun Price Override", true, "");
             BLACKLISTED = ConfigEntry("Blacklist", "Blacklist", "", "");
         }
     }

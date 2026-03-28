@@ -10,7 +10,8 @@ namespace SellBodies.Monos
             base.OnNetworkSpawn();
             prop = GetComponent<HauntedMaskItem>();
 
-            transform.rotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+            spawnRotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+            transform.rotation = spawnRotation;
 
             if (IsHost || IsServer)
             {
