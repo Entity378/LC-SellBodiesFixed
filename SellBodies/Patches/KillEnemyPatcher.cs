@@ -33,7 +33,7 @@ namespace SellBodies.Patches
 
         static IEnumerator MoveOldBody(EnemyAI __instance)
         {
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(Plugin.cfg.BODY_SPAWN_DELAY);
             if(__instance != null)
             {
                 Vector3 newBodyPos = new Vector3(-10000, -10000, -10000);

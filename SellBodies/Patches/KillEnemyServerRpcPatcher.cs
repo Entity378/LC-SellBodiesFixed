@@ -61,7 +61,7 @@ namespace SellBodies.Patches
         static IEnumerator SpawnGenericBody(EnemyAI __instance, string name, Vector3 propBodyPos, Quaternion propBodyRot)
         {
             Vector3 spawnPos = propBodyPos + new Vector3(0, 1, 0);
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(Plugin.cfg.BODY_SPAWN_DELAY);
 
             GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, spawnPos, propBodyRot);
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
@@ -90,7 +90,7 @@ namespace SellBodies.Patches
                     break;
                 }
             }
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(Plugin.cfg.BODY_SPAWN_DELAY);
 
             GameObject gameObjectCreated = Object.Instantiate(Plugin.instance.BodySpawns[name].spawnPrefab, spawnPos, propBodyRot);
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
@@ -99,6 +99,7 @@ namespace SellBodies.Patches
         static IEnumerator SpawnMask(EnemyAI __instance, Vector3 propBodyPos, Quaternion propBodyRot)
         {
             yield return new WaitForSeconds(0.1f);
+
             MaskedPlayerEnemy masked = __instance.GetComponent<MaskedPlayerEnemy>();
             Item maskToSpawn = masked.maskTypes[0].activeSelf ? ItemsPatcher.comedyMask : ItemsPatcher.tragedyMask;
             if (maskToSpawn != ItemsPatcher.comedyMask && maskToSpawn != ItemsPatcher.tragedyMask) 
@@ -121,7 +122,7 @@ namespace SellBodies.Patches
         static IEnumerator SpawnModdedBody(EnemyAI __instance, Vector3 propBodyPos, Quaternion propBodyRot)
         {
             Vector3 spawnPos = propBodyPos + new Vector3(0, 2, 0);
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(Plugin.cfg.BODY_SPAWN_DELAY);
 
             GameObject gameObjectCreated;
             if (__instance.GetComponent<EnemyAI>().enemyType.PowerLevel <= 1)
@@ -142,19 +143,17 @@ namespace SellBodies.Patches
         static IEnumerator SpawnEE(EnemyAI __instance, string name, Vector3 propBodyPos, Quaternion propBodyRot)
         {
             Vector3 spawnPos = propBodyPos + new Vector3(0, 1, 0);
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(Plugin.cfg.BODY_SPAWN_DELAY);
 
-            GameObject gameObjectCreated = new();
-
-            if (Random.Range(0, 2) == 1)
+            Item[] cartridges = new Item[]
             {
-                gameObjectCreated = Object.Instantiate(Plugin.instance.GameboyCartridgeRDA.spawnPrefab, spawnPos, propBodyRot);
-            }
-            else 
-            {
-                gameObjectCreated = Object.Instantiate(Plugin.instance.GameboyCartridgeRITN.spawnPrefab, spawnPos, propBodyRot);
-            }
+                Plugin.instance.GameboyCartridgeURL,
+                Plugin.instance.GameboyCartridgeRDA,
+                Plugin.instance.GameboyCartridgeRITN
+            };
 
+            Item picked = cartridges[Random.Range(0, cartridges.Length)];
+            GameObject gameObjectCreated = Object.Instantiate(picked.spawnPrefab, spawnPos, propBodyRot);
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();
 
             if (name == "Blob")

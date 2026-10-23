@@ -27,6 +27,9 @@ namespace CleaningCompany.Misc
         public bool CLAYSURGEON { get; set; }
         public bool BUSHWOLF { get; set; }
         public bool MANEATER { get; set; }
+        public bool STINGRAY { get; set; }
+        public bool CADAVER { get; set; }
+        public bool PUMA { get; set; }
         public bool MASKED { get; set; }
         public bool MODDEDENEMY { get; set; }
 
@@ -51,6 +54,9 @@ namespace CleaningCompany.Misc
         public bool CLAYSURGEON_TWOHANDED { get; set; }
         public bool BUSHWOLF_TWOHANDED { get; set; }
         public bool MANEATER_TWOHANDED { get; set; }
+        public bool STINGRAY_TWOHANDED { get; set; }
+        public bool CADAVER_TWOHANDED { get; set; }
+        public bool PUMA_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL1_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL2_TWOHANDED { get; set; }
         public bool MODDEDENEMYPOWERLEVEL3_TWOHANDED { get; set; }
@@ -76,6 +82,9 @@ namespace CleaningCompany.Misc
         public int CLAYSURGEON_MIN { get; set; }
         public int BUSHWOLF_MIN { get; set; }
         public int MANEATER_MIN { get; set; }
+        public int STINGRAY_MIN { get; set; }
+        public int CADAVER_MIN { get; set; }
+        public int PUMA_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL1_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL2_MIN { get; set; }
         public int MODDEDENEMYPOWERLEVEL3_MIN { get; set; }
@@ -101,6 +110,9 @@ namespace CleaningCompany.Misc
         public int CLAYSURGEON_MAX { get; set; }
         public int BUSHWOLF_MAX { get; set; }
         public int MANEATER_MAX { get; set; }
+        public int STINGRAY_MAX { get; set; }
+        public int CADAVER_MAX { get; set; }
+        public int PUMA_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL1_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL2_MAX { get; set; }
         public int MODDEDENEMYPOWERLEVEL3_MAX { get; set; }
@@ -126,6 +138,9 @@ namespace CleaningCompany.Misc
         public float CLAYSURGEON_WEIGHT { get; set; }
         public float BUSHWOLF_WEIGHT { get; set; }
         public float MANEATER_WEIGHT { get; set; }
+        public float STINGRAY_WEIGHT { get; set; }
+        public float CADAVER_WEIGHT { get; set; }
+        public float PUMA_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL1_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL2_WEIGHT { get; set; }
         public float MODDEDENEMYPOWERLEVEL3_WEIGHT { get; set; }
@@ -142,6 +157,7 @@ namespace CleaningCompany.Misc
 
         // Misc
         public bool SHOTGUN_PRICE { get; set; }
+        public float BODY_SPAWN_DELAY { get; set; }
 
         // blacklist
         public string BLACKLISTED { get; set; }
@@ -198,6 +214,12 @@ namespace CleaningCompany.Misc
             BUSHWOLF_MIN = ConfigEntry("Body Values", "Min price of Kidnapper Fox Bodies", 125, "");
             MANEATER_MAX = ConfigEntry("Body Values", "Max price of Maneater Bodies", 145, "");
             MANEATER_MIN = ConfigEntry("Body Values", "Min price of Maneater Bodies", 120, "");
+            STINGRAY_MAX = ConfigEntry("Body Values", "Max price of Backwater Gunkfish Bodies", 60, "");
+            STINGRAY_MIN = ConfigEntry("Body Values", "Min price of Backwater Gunkfish Bodies", 45, "");
+            CADAVER_MAX = ConfigEntry("Body Values", "Max price of Cadaver Bloom Bodies", 130, "");
+            CADAVER_MIN = ConfigEntry("Body Values", "Min price of Cadaver Bloom Bodies", 115, "");
+            PUMA_MAX = ConfigEntry("Body Values", "Max price of Feiopar Bodies", 160, "");
+            PUMA_MIN = ConfigEntry("Body Values", "Min price of Feiopar Bodies", 145, "");
             MODDEDENEMYPOWERLEVEL1_MAX = ConfigEntry("Body Values", "Max price of Modded Enemy Bodies With 1 Or Less PowerLevel", 100, "");
             MODDEDENEMYPOWERLEVEL1_MIN = ConfigEntry("Body Values", "Min price of Modded Enemy Bodies With 1 Or Less PowerLevel", 75, "");
             MODDEDENEMYPOWERLEVEL2_MAX = ConfigEntry("Body Values", "Max price of Modded Enemy Bodies With 2 PowerLevel", 150, "");
@@ -225,6 +247,9 @@ namespace CleaningCompany.Misc
             CLAYSURGEON = ConfigEntry("Body Enabler", "Enable selling of Barber Bodies", true, "");
             BUSHWOLF = ConfigEntry("Body Enabler", "Enable selling of Kidnapper Fox Bodies", true, "");
             MANEATER = ConfigEntry("Body Enabler", "Enable selling of Maneater Bodies", true, "");
+            STINGRAY = ConfigEntry("Body Enabler", "Enable selling of Backwater Gunkfish Bodies", true, "");
+            CADAVER = ConfigEntry("Body Enabler", "Enable selling of Cadaver Bloom Bodies", true, "");
+            PUMA = ConfigEntry("Body Enabler", "Enable selling of Feiopar Bodies", true, "");
             MASKED = ConfigEntry("Body Enabler", "Enable selling of Masked Masks", true, "");
             MODDEDENEMY = ConfigEntry("Body Enabler", "Enable selling of Modded Enemy Bodies", true, "");
 
@@ -248,6 +273,9 @@ namespace CleaningCompany.Misc
             CLAYSURGEON_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Barber Bodies", true, "");
             BUSHWOLF_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Kidnapper Fox Bodies", false, "");
             MANEATER_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Maneater Bodies", false, "");
+            STINGRAY_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Backwater Gunkfish Bodies", false, "");
+            CADAVER_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Cadaver Bloom Bodies", false, "");
+            PUMA_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Feiopar Bodies", true, "");
             MODDEDENEMYPOWERLEVEL1_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 1 Or Less PowerLevel", false, "");
             MODDEDENEMYPOWERLEVEL2_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 2 PowerLevel", false, "");
             MODDEDENEMYPOWERLEVEL3_TWOHANDED = ConfigEntry("Body Two-Handed", "Enable Two-Handed Modded Enemy Bodies With 3 Or Higher PowerLevel", false, "");
@@ -272,6 +300,9 @@ namespace CleaningCompany.Misc
             CLAYSURGEON_WEIGHT = ConfigEntry("Body Weights", "Weight of Barber Bodies", 1.76f, "");
             BUSHWOLF_WEIGHT = ConfigEntry("Body Weights", "Weight of Kidnapper Fox Bodies", 1.33f, "");
             MANEATER_WEIGHT = ConfigEntry("Body Weights", "Weight of Maneater Bodies", 1.33f, "");
+            STINGRAY_WEIGHT = ConfigEntry("Body Weights", "Weight of Backwater Gunkfish Bodies", 1.33f, "");
+            CADAVER_WEIGHT = ConfigEntry("Body Weights", "Weight of Cadaver Bloom Bodies", 1.25f, "");
+            PUMA_WEIGHT = ConfigEntry("Body Weights", "Weight of Feiopar Bodies", 1.45f, "");
             MODDEDENEMYPOWERLEVEL1_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 1 Or Less PowerLevel", 1.33f, "");
             MODDEDENEMYPOWERLEVEL2_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 2 PowerLevel", 1.52f, "");
             MODDEDENEMYPOWERLEVEL3_WEIGHT = ConfigEntry("Body Weights", "Weight of Modded Enemy Bodies With 3 Or Higher PowerLevel", 1.86f, "");
@@ -285,6 +316,8 @@ namespace CleaningCompany.Misc
             YIPPEE = ConfigEntry("Confetti Options", "Enable Yippe", false, "");
 
             SHOTGUN_PRICE = ConfigEntry("Misc", "Shotgun Price Override", true, "");
+            BODY_SPAWN_DELAY = ConfigEntry("Misc", "Body Spawn Delay", 4.0f, "Indicates the time it takes for the enemy's body/drop to become collectible");
+
             BLACKLISTED = ConfigEntry("Blacklist", "Blacklist", "", "");
         }
     }

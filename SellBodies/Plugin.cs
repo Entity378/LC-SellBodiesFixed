@@ -18,7 +18,7 @@ namespace SellBodies
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.13.9";
+        const string VERSION = "1.14.0";
 
         static string bodiesRoot = "Assets/LethalCompany/SellBodies/Items/";
         static string mainRoot = "Assets/LethalCompany/SellBodies/";
@@ -52,7 +52,11 @@ namespace SellBodies
             "Clay Surgeon",
             "Bush Wolf",
             "Maneater",
-            "GiantKiwi"
+            "GiantKiwi",
+            "Stingray",
+            "Cadaver Growths",
+            "Cadaver Bloom",
+            "Feiopar"
         };
 
         public List<string> BlackListed = new List<string>();
@@ -63,16 +67,18 @@ namespace SellBodies
 
         public static PluginConfig cfg { get; private set; }
 
-        public static GameObject ConfettiPrefab = new GameObject();
+        public static GameObject ConfettiPrefab;
 
         public Item Gameboy;
         public Item GameboyCartridgeRITN;
         public Item GameboyCartridgeRDA;
-        public static GameBoyInput InputActionsInstance = new GameBoyInput();
+        public Item GameboyCartridgeURL;
+        public static GameBoyInput InputActionsInstance;
 
         void Awake()
         {
             instance = this;
+            InputActionsInstance = new GameBoyInput();
 
             cfg = new PluginConfig(Config);
             cfg.InitBindings();
@@ -112,19 +118,22 @@ namespace SellBodies
             Gameboy = bundle.LoadAsset<Item>(mainRoot + "Gameboy/Gameboy.asset");
             GameboyCartridgeRITN = bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeRITN/CartridgeRITN.asset");
             GameboyCartridgeRDA = bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeRDA/CartridgeRDA.asset");
+            GameboyCartridgeURL = bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeURL/CartridgeURL.asset");
 
             Utilities.FixMixerGroups(Gameboy.spawnPrefab);
             Utilities.FixMixerGroups(GameboyCartridgeRITN.spawnPrefab);
             Utilities.FixMixerGroups(GameboyCartridgeRDA.spawnPrefab);
+            Utilities.FixMixerGroups(GameboyCartridgeURL.spawnPrefab);
 
             NetworkPrefabs.RegisterNetworkPrefab(Gameboy.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(GameboyCartridgeRITN.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(GameboyCartridgeRDA.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(GameboyCartridgeURL.spawnPrefab);
 
             Items.RegisterShopItem(Gameboy, 20);
             Items.RegisterItem(GameboyCartridgeRITN);
             Items.RegisterItem(GameboyCartridgeRDA);
-
+            Items.RegisterItem(GameboyCartridgeURL);
 
             ApplyConfig();
             RegisterDefaultBodies();
@@ -170,6 +179,9 @@ namespace SellBodies
             RegisterBody("Clay Surgeon", bodiesRoot + "ClaySurgeonBody.asset", cfg.CLAYSURGEON_MIN, cfg.CLAYSURGEON_MAX, cfg.CLAYSURGEON_WEIGHT, cfg.CLAYSURGEON_TWOHANDED, cfg.CLAYSURGEON);
             RegisterBody("Bush Wolf", bodiesRoot + "BushWolfBody.asset", cfg.BUSHWOLF_MIN, cfg.BUSHWOLF_MAX, cfg.BUSHWOLF_WEIGHT, cfg.BUSHWOLF_TWOHANDED, cfg.BUSHWOLF);
             RegisterBody("Maneater", bodiesRoot + "CaveDwellerBody.asset", cfg.MANEATER_MIN, cfg.MANEATER_MAX, cfg.MANEATER_WEIGHT, cfg.MANEATER_TWOHANDED, cfg.MANEATER);
+            RegisterBody("Stingray", bodiesRoot + "StingrayBody.asset", cfg.STINGRAY_MIN, cfg.STINGRAY_MAX, cfg.STINGRAY_WEIGHT, cfg.STINGRAY_TWOHANDED, cfg.STINGRAY);
+            RegisterBody("Cadaver Bloom", bodiesRoot + "CadaverBody.asset", cfg.CADAVER_MIN, cfg.CADAVER_MAX, cfg.CADAVER_WEIGHT, cfg.CADAVER_TWOHANDED, cfg.CADAVER);
+            RegisterBody("Feiopar", bodiesRoot + "PumaBody.asset", cfg.PUMA_MIN, cfg.PUMA_MAX, cfg.PUMA_WEIGHT, cfg.PUMA_TWOHANDED, cfg.PUMA);
             RegisterBody("ModdedEnemyPowerLevel1", bodiesRoot + "ModdedEnemyPowerLevel1Body.asset", cfg.MODDEDENEMYPOWERLEVEL1_MIN, cfg.MODDEDENEMYPOWERLEVEL1_MAX, cfg.MODDEDENEMYPOWERLEVEL1_WEIGHT, cfg.MODDEDENEMYPOWERLEVEL1_TWOHANDED, cfg.MODDEDENEMY);
             RegisterBody("ModdedEnemyPowerLevel2", bodiesRoot + "ModdedEnemyPowerLevel2Body.asset", cfg.MODDEDENEMYPOWERLEVEL2_MIN, cfg.MODDEDENEMYPOWERLEVEL2_MAX, cfg.MODDEDENEMYPOWERLEVEL2_WEIGHT, cfg.MODDEDENEMYPOWERLEVEL2_TWOHANDED, cfg.MODDEDENEMY);
             RegisterBody("ModdedEnemyPowerLevel3", bodiesRoot + "ModdedEnemyPowerLevel3Body.asset", cfg.MODDEDENEMYPOWERLEVEL3_MIN, cfg.MODDEDENEMYPOWERLEVEL3_MAX, cfg.MODDEDENEMYPOWERLEVEL3_WEIGHT, cfg.MODDEDENEMYPOWERLEVEL3_TWOHANDED, cfg.MODDEDENEMY);
