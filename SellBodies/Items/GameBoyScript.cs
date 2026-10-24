@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Text.RegularExpressions;
+using GameNetcodeStuff;
 using SellBodies;
 using Unity.Netcode;
 using UnityEngine;
@@ -9,56 +10,63 @@ using UnityEngine.Video;
 
 public class GameBoyScript : GrabbableObject
 {
-    private GameBoyCartridgeScript insertedCartridge;
-
     public GameObject gameboyCartrige;
     public GameObject gameboyBackground;
 
-    public Material gameboyCartrigeMat;
-
     public VideoPlayer gameboyVideoPlayer;
-    public VideoClip gameboyVideoClip;
-    public string gameboyURL;
 
     public AudioClip errorSFX;
-    public AudioClip useButtonSFX;
-    public AudioClip dropSFX;
-    public AudioClip grabSFX;
     public AudioSource audio;
 
-    private bool hasCartrige = false;
+    private Item cartridgeItem;
+    private GameBoyCartridgeScript cartridge;
+    private string gameboyURL = "";
     private bool isResolvingURL = false;
 
     private const string YT_API_URL = "https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w&hl=en";
-    private const string YT_USER_AGENT = "com.google.android.apps.youtube.vr.oculus/1.60.19 (Linux; U; Android 12L; Quest 3 Build/SQ3A.220605.009.A1) gzip";
+    private const string YT_USER_AGENT = "com.google.android.youtube/20.10.38 (Linux; U; Android 11) gzip";
     private const string YT_SOCS_COOKIE = "SOCS=CAISEwgDEgk4MTM4MzYzNTIaAmVuIAEaBgiApPzGBg";
 
     public override void Start()
     {
         base.Start();
-        if (!hasCartrige)
-        {
-            gameboyCartrige.SetActive(false);
-            gameboyBackground.SetActive(false);
-        }
+        SetCartridge(cartridgeItem, gameboyURL);
     }
 
     public override void Update()
     {
         base.Update();
-        if (playerHeldBy != null && !isPocketed)
+        if (CanUseKeys())
         {
-            if (!playerHeldBy.isGrabbingObjectAnimation &&
-                !playerHeldBy.isTypingChat &&
-                !playerHeldBy.inTerminalMenu &&
-                !playerHeldBy.inSpecialInteractAnimation &&
-                playerHeldBy.hoveringOverTrigger == null)
-            {
-                SetupKeyCallbacks();
-                return;
-            }
+            SetupKeyCallbacks();
         }
+        else
+        {
+            StopKeyCallbacks();
+        }
+    }
+
+    private bool CanUseKeys()
+    {
+        if (!IsOwner || playerHeldBy == null || isPocketed)
+        {
+            return false;
+        }
+        if (playerHeldBy.isGrabbingObjectAnimation || playerHeldBy.isTypingChat || playerHeldBy.inTerminalMenu)
+        {
+            return false;
+        }
+        if (playerHeldBy.inSpecialInteractAnimation || playerHeldBy.hoveringOverTrigger != null)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public override void OnDestroy()
+    {
         StopKeyCallbacks();
+        base.OnDestroy();
     }
 
     public override void GrabItem()
@@ -85,14 +93,35 @@ public class GameBoyScript : GrabbableObject
         base.PocketItem();
     }
 
-    public void SetupKeyCallbacks()
+    public override int GetItemDataToSave()
+    {
+        base.GetItemDataToSave();
+        if (cartridgeItem == null) return 0;
+        return cartridgeItem.itemId;
+    }
+
+    public override void LoadItemSaveData(int saveData)
+    {
+        base.LoadItemSaveData(saveData);
+        foreach (Item item in Plugin.instance.GameboyCartridges)
+        {
+            if (item.itemId == saveData)
+            {
+                SetCartridge(item, "");
+                return;
+            }
+        }
+        SetCartridge(null, "");
+    }
+
+    private void SetupKeyCallbacks()
     {
         Plugin.InputActionsInstance.LoadCartridgeKey.performed += LoadCartridge;
         Plugin.InputActionsInstance.VolumeUpKey.performed += VolumeUp;
         Plugin.InputActionsInstance.VolumeDownKey.performed += VolumeDown;
     }
 
-    public void StopKeyCallbacks()
+    private void StopKeyCallbacks()
     {
         Plugin.InputActionsInstance.LoadCartridgeKey.performed -= LoadCartridge;
         Plugin.InputActionsInstance.VolumeUpKey.performed -= VolumeUp;
@@ -102,7 +131,7 @@ public class GameBoyScript : GrabbableObject
     public override void ItemActivate(bool used, bool buttonDown = true)
     {
         base.ItemActivate(used, buttonDown);
-        if (!buttonDown || playerHeldBy == null || !hasCartrige) return;
+        if (!buttonDown || playerHeldBy == null || cartridgeItem == null) return;
 
         if (gameboyVideoPlayer.isPlaying)
         {
@@ -114,7 +143,7 @@ public class GameBoyScript : GrabbableObject
             gameboyBackground.SetActive(true);
             gameboyVideoPlayer.Play();
         }
-        else if (insertedCartridge.isURLCartridge)
+        else if (cartridge.isURLCartridge)
         {
             if (string.IsNullOrEmpty(gameboyURL))
             {
@@ -126,173 +155,218 @@ public class GameBoyScript : GrabbableObject
         }
         else
         {
-            gameboyVideoPlayer.clip = gameboyVideoClip;
+            gameboyVideoPlayer.clip = cartridge.videoClip;
             gameboyVideoPlayer.frame = 0;
             gameboyVideoPlayer.Play();
             gameboyBackground.SetActive(true);
         }
     }
 
-    public void VolumeUp(InputAction.CallbackContext VolumeUpContext)
+    private void VolumeUp(InputAction.CallbackContext context)
     {
-        if (!VolumeUpContext.performed || playerHeldBy == null) return;
-        audio.volume = Mathf.Clamp(audio.volume + 0.1f, 0f, 1f);
-        VolumeUpServerRpc();
+        SetVolumeServerRpc(audio.volume + 0.1f);
+    }
+
+    private void VolumeDown(InputAction.CallbackContext context)
+    {
+        SetVolumeServerRpc(audio.volume - 0.1f);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void VolumeUpServerRpc()
+    private void SetVolumeServerRpc(float volume)
     {
-        VolumeUpClientRpc();
+        SetVolumeClientRpc(Mathf.Clamp01(volume));
     }
 
     [ClientRpc]
-    private void VolumeUpClientRpc()
+    private void SetVolumeClientRpc(float volume)
     {
-        if (IsOwner) return;
-        audio.volume = Mathf.Clamp(audio.volume + 0.1f, 0f, 1f);
+        audio.volume = volume;
     }
 
-    public void VolumeDown(InputAction.CallbackContext VolumeDownContext)
+    private void LoadCartridge(InputAction.CallbackContext context)
     {
-        if (!VolumeDownContext.performed || playerHeldBy == null) return;
-        audio.volume = Mathf.Clamp(audio.volume - 0.1f, 0f, 1f);
-        VolumeDownServerRpc();
-    }
+        if (!CanUseKeys()) return;
 
-    [ServerRpc(RequireOwnership = false)]
-    private void VolumeDownServerRpc()
-    {
-        VolumeDownClientRpc();
-    }
-
-    [ClientRpc]
-    private void VolumeDownClientRpc()
-    {
-        if (IsOwner) return;
-        audio.volume = Mathf.Clamp(audio.volume - 0.1f, 0f, 1f);
-    }
-
-    public void LoadCartridge(InputAction.CallbackContext LoadCartridgeContext)
-    {
-        if (!LoadCartridgeContext.performed || playerHeldBy == null) return;
-
-        if (!hasCartrige)
+        if (cartridgeItem != null)
         {
-            int cartrigeIndex = getCartrigeInventorySlot();
-            if (cartrigeIndex != -1)
-            {
-                GameBoyCartridgeScript cartridgeInInventory = playerHeldBy.ItemSlots[cartrigeIndex].GetComponent<GameBoyCartridgeScript>();
-                gameboyURL = "";
-
-                if (cartridgeInInventory)
-                {
-                    gameboyURL = cartridgeInInventory.URL;
-                }
-
-                ExecuteLoadCartridge(cartrigeIndex, gameboyURL);
-                LoadCartridgeServerRpc(cartrigeIndex, gameboyURL);
-            }
+            EjectCartridgeServerRpc(cartridgeItem.itemName, gameboyURL, (int)playerHeldBy.playerClientId, GetFreeSlot());
+            SetCartridge(null, "");
+            return;
         }
-        else
-        {
-            ExecuteUnloadCartridge();
-            UnloadCartridgeServerRpc();
-        }
+
+        int slot = GetCartridgeSlot();
+        if (slot == -1) return;
+
+        GameBoyCartridgeScript inserted = playerHeldBy.ItemSlots[slot].GetComponent<GameBoyCartridgeScript>();
+        Item item = inserted.itemProperties;
+        string url = inserted.URL;
+
+        playerHeldBy.DestroyItemInSlotAndSync(slot);
+        SetCartridge(item, url);
+        SetCartridgeServerRpc(item.itemName, url);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void LoadCartridgeServerRpc(int cartrigeIndex, string url)
+    private void SetCartridgeServerRpc(string cartridgeName, string url)
     {
-        LoadCartridgeClientRpc(cartrigeIndex, url);
+        SetCartridgeClientRpc(cartridgeName, url);
     }
 
     [ClientRpc]
-    private void LoadCartridgeClientRpc(int cartrigeIndex, string url)
+    private void SetCartridgeClientRpc(string cartridgeName, string url)
     {
         if (IsOwner) return;
-        ExecuteLoadCartridge(cartrigeIndex, url);
+        SetCartridge(FindCartridge(cartridgeName), url);
     }
 
-    private void ExecuteLoadCartridge(int cartrigeIndex, string url = "")
+    private void SetCartridge(Item item, string url)
     {
-        if (playerHeldBy == null) return;
+        cartridgeItem = item;
+        cartridge = null;
+        if (item != null)
+        {
+            cartridge = item.spawnPrefab.GetComponent<GameBoyCartridgeScript>();
+        }
+        gameboyURL = url;
 
-        GameBoyCartridgeScript cartridgeInInventory = playerHeldBy.ItemSlots[cartrigeIndex].GetComponent<GameBoyCartridgeScript>();
-        insertedCartridge = cartridgeInInventory;
+        gameboyVideoPlayer.Stop();
+        gameboyBackground.SetActive(false);
+        gameboyCartrige.SetActive(item != null);
+        if (item == null) return;
 
-        gameboyCartrigeMat = cartridgeInInventory.cartrigeMat;
-
-        if (cartridgeInInventory.isURLCartridge)
+        if (cartridge.isURLCartridge)
         {
             gameboyVideoPlayer.source = VideoSource.Url;
-            gameboyURL = url;
         }
         else
         {
             gameboyVideoPlayer.source = VideoSource.VideoClip;
-            gameboyVideoClip = cartridgeInInventory.videoClip;
-            gameboyURL = "";
         }
 
-        var renderers = gameboyCartrige.GetComponentsInChildren<MeshRenderer>();
-
-        foreach (var r in renderers)
+        foreach (MeshRenderer meshRenderer in gameboyCartrige.GetComponentsInChildren<MeshRenderer>())
         {
-            r.material = gameboyCartrigeMat;
+            meshRenderer.material = cartridge.cartrigeMat;
         }
+    }
 
-        if (IsOwner)
+    private Item FindCartridge(string cartridgeName)
+    {
+        foreach (Item item in Plugin.instance.GameboyCartridges)
         {
-            HUDManager.Instance.itemSlotIcons[cartrigeIndex].enabled = false;
+            if (item.itemName == cartridgeName)
+            {
+                return item;
+            }
         }
+        return null;
+    }
 
-        playerHeldBy.ItemSlots[cartrigeIndex] = null;
-        insertedCartridge.gameObject.SetActive(false);
-        gameboyCartrige.SetActive(true);
-        hasCartrige = true;
+    private int GetCartridgeSlot()
+    {
+        for (int i = 0; i < playerHeldBy.ItemSlots.Length; i++)
+        {
+            if (playerHeldBy.ItemSlots[i] != null && playerHeldBy.ItemSlots[i].GetComponent<GameBoyCartridgeScript>() != null)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int GetFreeSlot()
+    {
+        for (int i = 0; i < playerHeldBy.ItemSlots.Length; i++)
+        {
+            if (playerHeldBy.ItemSlots[i] == null)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void UnloadCartridgeServerRpc()
+    private void EjectCartridgeServerRpc(string cartridgeName, string url, int playerId, int slot)
     {
-        UnloadCartridgeClientRpc();
+        GameObject ejectedObject = Instantiate(FindCartridge(cartridgeName).spawnPrefab, transform.position, Quaternion.identity);
+        NetworkObject ejected = ejectedObject.GetComponent<NetworkObject>();
+        ejected.Spawn();
+        if (slot != -1)
+        {
+            ejected.ChangeOwnership(StartOfRound.Instance.allPlayerScripts[playerId].actualClientId);
+        }
+        EjectCartridgeClientRpc(ejected, url, playerId, slot);
     }
 
     [ClientRpc]
-    private void UnloadCartridgeClientRpc()
+    private void EjectCartridgeClientRpc(NetworkObjectReference ejectedRef, string url, int playerId, int slot)
     {
-        if (IsOwner) return;
-        ExecuteUnloadCartridge();
+        if (!IsOwner)
+        {
+            SetCartridge(null, "");
+        }
+        StartCoroutine(PlaceEjectedCartridge(ejectedRef, url, StartOfRound.Instance.allPlayerScripts[playerId], slot));
     }
 
-    private void ExecuteUnloadCartridge()
+    private IEnumerator PlaceEjectedCartridge(NetworkObjectReference ejectedRef, string url, PlayerControllerB player, int slot)
     {
-        if (playerHeldBy == null) return;
+        yield return null;
+        if (!ejectedRef.TryGet(out NetworkObject networkObject)) yield break;
 
-        gameboyCartrige.SetActive(false);
-        gameboyBackground.SetActive(false);
-        insertedCartridge.gameObject.SetActive(true);
+        GameBoyCartridgeScript ejected = networkObject.GetComponent<GameBoyCartridgeScript>();
+        ejected.URL = url;
+        ejected.isInElevator = isInElevator;
+        ejected.isInShipRoom = isInShipRoom;
+        ejected.isInFactory = isInFactory;
 
-        gameboyVideoPlayer.Stop();
-
-        int freeSlot = GetFreeInventorySlot();
-
-        if (freeSlot != -1)
+        if (slot == -1 || player.ItemSlots[slot] != null)
         {
-            playerHeldBy.ItemSlots[freeSlot] = insertedCartridge;
-            if (IsOwner)
-            {
-                HUDManager.Instance.itemSlotIcons[freeSlot].enabled = true;
-            }
+            DropEjectedCartridge(ejected);
         }
         else
         {
-            DropItem(insertedCartridge);
+            PutEjectedCartridgeInSlot(ejected, player, slot);
         }
+    }
 
-        insertedCartridge = null;
-        hasCartrige = false;
+    private void DropEjectedCartridge(GameBoyCartridgeScript ejected)
+    {
+        if (isInElevator)
+        {
+            ejected.transform.SetParent(StartOfRound.Instance.elevatorTransform, true);
+        }
+        else
+        {
+            ejected.transform.SetParent(StartOfRound.Instance.propsContainer, true);
+        }
+        ejected.startFallingPosition = ejected.transform.localPosition;
+        ejected.FallToGround();
+    }
+
+    private void PutEjectedCartridgeInSlot(GameBoyCartridgeScript ejected, PlayerControllerB player, int slot)
+    {
+        ejected.playerHeldBy = player;
+        if (player.IsOwner)
+        {
+            ejected.parentObject = player.localItemHolder;
+        }
+        else
+        {
+            ejected.parentObject = player.serverItemHolder;
+        }
+        ejected.heldByPlayerOnServer = true;
+        ejected.isHeld = true;
+        ejected.isPocketed = true;
+        ejected.EnablePhysics(false);
+        ejected.EnableItemMeshes(false);
+        player.ItemSlots[slot] = ejected;
+
+        if (player.IsOwner)
+        {
+            HUDManager.Instance.itemSlotIcons[slot].sprite = ejected.itemProperties.itemIcon;
+            HUDManager.Instance.itemSlotIcons[slot].enabled = true;
+        }
     }
 
     private IEnumerator ResolveAndPlay(string url)
@@ -312,29 +386,14 @@ public class GameBoyScript : GrabbableObject
                 yield break;
             }
 
-            string visitorData = "";
+            directUrl = null;
 
-            using (UnityWebRequest initReq = CreateYouTubeRequest(videoId, null))
+            using (UnityWebRequest request = CreateYouTubeRequest(videoId))
             {
-                yield return initReq.SendWebRequest();
+                yield return request.SendWebRequest();
 
-                string initJson = initReq.downloadHandler?.text ?? "";
-                var vdMatch = Regex.Match(initJson, @"""visitorData""\s*:\s*""([^""]+)""");
-                if (vdMatch.Success)
-                    visitorData = vdMatch.Groups[1].Value;
-
-                directUrl = ExtractStreamURL(initJson);
-            }
-
-            if (directUrl == null && !string.IsNullOrEmpty(visitorData))
-            {
-                using (UnityWebRequest retryReq = CreateYouTubeRequest(videoId, visitorData))
-                {
-                    yield return retryReq.SendWebRequest();
-
-                    if (retryReq.result == UnityWebRequest.Result.Success)
-                        directUrl = ExtractStreamURL(retryReq.downloadHandler.text);
-                }
+                if (request.result == UnityWebRequest.Result.Success)
+                    directUrl = ExtractStreamURL(request.downloadHandler.text);
             }
 
             if (directUrl == null)
@@ -348,7 +407,7 @@ public class GameBoyScript : GrabbableObject
 
         isResolvingURL = false;
 
-        if (!hasCartrige || insertedCartridge == null || !insertedCartridge.isURLCartridge)
+        if (cartridge == null || !cartridge.isURLCartridge)
             yield break;
 
         gameboyVideoPlayer.url = directUrl;
@@ -357,7 +416,7 @@ public class GameBoyScript : GrabbableObject
 
         while (!gameboyVideoPlayer.isPrepared)
         {
-            if (!hasCartrige || insertedCartridge == null)
+            if (cartridge == null)
                 yield break;
             yield return null;
         }
@@ -366,10 +425,9 @@ public class GameBoyScript : GrabbableObject
         gameboyBackground.SetActive(true);
     }
 
-    private static UnityWebRequest CreateYouTubeRequest(string videoId, string visitorData)
+    private static UnityWebRequest CreateYouTubeRequest(string videoId)
     {
-        string visitorField = string.IsNullOrEmpty(visitorData) ? "" : ",\"visitorData\":\"" + visitorData + "\"";
-        string body = "{\"videoId\":\"" + videoId + "\",\"context\":{\"client\":{\"clientName\":\"ANDROID_VR\",\"clientVersion\":\"1.60.19\",\"deviceMake\":\"Meta\",\"deviceModel\":\"Quest 3\",\"osName\":\"Android\",\"osVersion\":\"12L\",\"platform\":\"MOBILE\",\"hl\":\"en\",\"gl\":\"US\"" + visitorField + "}},\"contentCheckOk\":true,\"racyCheckOk\":true}";
+        string body = "{\"videoId\":\"" + videoId + "\",\"context\":{\"client\":{\"clientName\":\"ANDROID\",\"clientVersion\":\"20.10.38\",\"androidSdkVersion\":30,\"osName\":\"Android\",\"osVersion\":\"11\",\"hl\":\"en\",\"gl\":\"US\"}},\"contentCheckOk\":true,\"racyCheckOk\":true}";
 
         var request = new UnityWebRequest(YT_API_URL, "POST");
         request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(body));
@@ -437,60 +495,5 @@ public class GameBoyScript : GrabbableObject
         }
 
         return null;
-    }
-
-    public int getCartrigeInventorySlot()
-    {
-        for (int i = 0; i < playerHeldBy.ItemSlots.Length; i++)
-        {
-            if (playerHeldBy.ItemSlots[i] != null)
-            {
-                GameBoyCartridgeScript cartridge = playerHeldBy.ItemSlots[i].GetComponent<GameBoyCartridgeScript>();
-                if (cartridge != null)
-                {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
-    public int GetFreeInventorySlot()
-    {
-        for (int i = 0; i < playerHeldBy.ItemSlots.Length; i++)
-        {
-            if (playerHeldBy.ItemSlots[i] == null)
-                return i;
-        }
-        return -1;
-    }
-
-    private void DropItem(GrabbableObject item)
-    {
-        if (item == null || playerHeldBy == null) return;
-
-        item.parentObject = null;
-        item.heldByPlayerOnServer = false;
-
-        if (playerHeldBy.isInElevator)
-            item.transform.SetParent(playerHeldBy.playersManager.elevatorTransform, true);
-        else
-            item.transform.SetParent(playerHeldBy.playersManager.propsContainer, true);
-
-        playerHeldBy.SetItemInElevator(playerHeldBy.isInHangarShipRoom, playerHeldBy.isInElevator, item);
-
-        item.EnablePhysics(true);
-        item.EnableItemMeshes(true);
-        item.transform.localScale = item.originalScale;
-        item.isHeld = false;
-        item.isPocketed = false;
-
-        item.startFallingPosition = item.transform.parent.InverseTransformPoint(transform.position - Vector3.downVector);
-        item.FallToGround(true, false, default(Vector3));
-        item.fallTime = Random.Range(-0.3f, 0.05f);
-
-        item.DiscardItem();
-
-        item.playerHeldBy = null;
     }
 }

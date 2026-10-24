@@ -10,7 +10,6 @@ namespace SellBodies.Patches
     [HarmonyPatch(typeof(EnemyAI))]
     internal class KillEnemyServerRpcPatcher
     {
-        public static int publicShotgunPrice = 60;
         private static ulong currentEnemy = 9999999;
 
         [HarmonyPrefix]
@@ -76,7 +75,6 @@ namespace SellBodies.Patches
         {
             Vector3 spawnPos = propBodyPos + new Vector3(0, 1, 0);
 
-            publicShotgunPrice = __instance.GetComponent<NutcrackerEnemyAI>().gun.scrapValue;
             __instance.GetComponent<NutcrackerEnemyAI>().gun.GetComponent<NetworkObject>().Despawn();
 
             List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
@@ -145,13 +143,7 @@ namespace SellBodies.Patches
             Vector3 spawnPos = propBodyPos + new Vector3(0, 1, 0);
             yield return new WaitForSeconds(Plugin.cfg.BODY_SPAWN_DELAY);
 
-            Item[] cartridges = new Item[]
-            {
-                Plugin.instance.GameboyCartridgeURL,
-                Plugin.instance.GameboyCartridgeRDA,
-                Plugin.instance.GameboyCartridgeRITN
-            };
-
+            Item[] cartridges = Plugin.instance.GameboyCartridges;
             Item picked = cartridges[Random.Range(0, cartridges.Length)];
             GameObject gameObjectCreated = Object.Instantiate(picked.spawnPrefab, spawnPos, propBodyRot);
             gameObjectCreated.GetComponent<NetworkObject>().Spawn();

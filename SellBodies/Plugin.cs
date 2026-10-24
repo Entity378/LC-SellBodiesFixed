@@ -18,7 +18,7 @@ namespace SellBodies
         readonly Harmony harmony = new Harmony(GUID);
         const string GUID = "Entity378.sellbodies";
         const string NAME = "Sell Bodies";
-        const string VERSION = "1.14.0";
+        const string VERSION = "1.14.1";
 
         static string bodiesRoot = "Assets/LethalCompany/SellBodies/Items/";
         static string mainRoot = "Assets/LethalCompany/SellBodies/";
@@ -70,9 +70,7 @@ namespace SellBodies
         public static GameObject ConfettiPrefab;
 
         public Item Gameboy;
-        public Item GameboyCartridgeRITN;
-        public Item GameboyCartridgeRDA;
-        public Item GameboyCartridgeURL;
+        public Item[] GameboyCartridges;
         public static GameBoyInput InputActionsInstance;
 
         void Awake()
@@ -116,24 +114,23 @@ namespace SellBodies
 
 
             Gameboy = bundle.LoadAsset<Item>(mainRoot + "Gameboy/Gameboy.asset");
-            GameboyCartridgeRITN = bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeRITN/CartridgeRITN.asset");
-            GameboyCartridgeRDA = bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeRDA/CartridgeRDA.asset");
-            GameboyCartridgeURL = bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeURL/CartridgeURL.asset");
-
             Utilities.FixMixerGroups(Gameboy.spawnPrefab);
-            Utilities.FixMixerGroups(GameboyCartridgeRITN.spawnPrefab);
-            Utilities.FixMixerGroups(GameboyCartridgeRDA.spawnPrefab);
-            Utilities.FixMixerGroups(GameboyCartridgeURL.spawnPrefab);
-
             NetworkPrefabs.RegisterNetworkPrefab(Gameboy.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(GameboyCartridgeRITN.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(GameboyCartridgeRDA.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(GameboyCartridgeURL.spawnPrefab);
-
             Items.RegisterShopItem(Gameboy, 20);
-            Items.RegisterItem(GameboyCartridgeRITN);
-            Items.RegisterItem(GameboyCartridgeRDA);
-            Items.RegisterItem(GameboyCartridgeURL);
+
+            GameboyCartridges = new Item[]
+            {
+                bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeRITN/CartridgeRITN.asset"),
+                bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeRDA/CartridgeRDA.asset"),
+                bundle.LoadAsset<Item>(mainRoot + "Gameboy/CartridgeURL/CartridgeURL.asset")
+            };
+
+            foreach (Item cartridge in GameboyCartridges)
+            {
+                Utilities.FixMixerGroups(cartridge.spawnPrefab);
+                NetworkPrefabs.RegisterNetworkPrefab(cartridge.spawnPrefab);
+                Items.RegisterItem(cartridge);
+            }
 
             ApplyConfig();
             RegisterDefaultBodies();

@@ -156,7 +156,6 @@ namespace CleaningCompany.Misc
         public bool YIPPEE { get; set; }
 
         // Misc
-        public bool SHOTGUN_PRICE { get; set; }
         public float BODY_SPAWN_DELAY { get; set; }
 
         // blacklist
@@ -315,7 +314,6 @@ namespace CleaningCompany.Misc
             CONFETTI = ConfigEntry("Confetti Options", "Enable Confetti", false, "");
             YIPPEE = ConfigEntry("Confetti Options", "Enable Yippe", false, "");
 
-            SHOTGUN_PRICE = ConfigEntry("Misc", "Shotgun Price Override", true, "");
             BODY_SPAWN_DELAY = ConfigEntry("Misc", "Body Spawn Delay", 4.0f, "Indicates the time it takes for the enemy's body/drop to become collectible");
 
             BLACKLISTED = ConfigEntry("Blacklist", "Blacklist", "", "");

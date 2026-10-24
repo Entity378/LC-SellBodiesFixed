@@ -13,7 +13,7 @@ namespace SellBodies.Monos
             spawnRotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
             transform.rotation = spawnRotation;
 
-            if (IsHost || IsServer)
+            if ((IsHost || IsServer) && !prop.scrapPersistedThroughRounds)
             {
                 int price;
                 int priceBase = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);

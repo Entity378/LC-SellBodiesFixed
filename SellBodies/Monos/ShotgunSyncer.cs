@@ -14,12 +14,36 @@ namespace SellBodies.Monos
             spawnRotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 90f);
             transform.rotation = spawnRotation;
 
-            if (IsHost || IsServer)
+            if ((IsHost || IsServer) && !prop.scrapPersistedThroughRounds)
             {
-                int price = 60;
-                if (Plugin.cfg.SHOTGUN_PRICE && KillEnemyServerRpcPatcher.publicShotgunPrice != 0)
+                int price;
+                int priceBase = 60;
+
+                if (Plugin.cfg.MULTIPLIER)
                 {
-                    price = KillEnemyServerRpcPatcher.publicShotgunPrice;
+                    float powerFactor = 1;
+                    float vanillaFactor = 1;
+                    float baseFactor = Plugin.cfg.MULTIPLIER_VALUE;
+
+                    if (Plugin.cfg.ENEMY_MULTIPLIER) 
+                    {
+                        SelectableLevel currentLevel = StartOfRound.Instance.currentLevel;
+                        int totalPowerCount = currentLevel.maxEnemyPowerCount + currentLevel.maxOutsideEnemyPowerCount;
+                        powerFactor = 1 + (totalPowerCount - 10) / 100f;
+                    }
+
+                    if (Plugin.cfg.VANILLA_MULTIPLIER)
+                    {
+                        float vanillaMultiplier = RoundManager.Instance.scrapValueMultiplier;
+                        vanillaFactor = vanillaMultiplier * 2.5f;
+                    }
+
+                    float priceMultiplier = powerFactor * vanillaFactor * baseFactor;
+                    price = (int)(priceBase * priceMultiplier);
+                }
+                else
+                {
+                    price = priceBase;
                 }
 
                 int ammo = 2;
